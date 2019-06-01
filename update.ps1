@@ -18,7 +18,7 @@ function global:au_SearchReplace {
 			"(?i)(^\s*ChecksumType\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType32)'"
 			"(?i)(^\s*Checksum64\s*=\s*)('.*')" = "`$1'$($Latest.Checksum64)'"
 			"(?i)(^\s*ChecksumType64\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType64)'"
-			"(?i)(^\s*SoftwareName\s*=\s*)('.*')" = "`$1'$($Latest.Title)'"
+			# "(?i)(^\s*SoftwareName\s*=\s*)('.*')" = "`$1'$($Latest.Title)'"
 		}
     ".\adoptopenjdk.nuspec" = @{
 			"(?i)(^\s*\<id\>).*(\<\/id\>)" = "`${1}$($Latest.PackageName)`${2}"
@@ -30,76 +30,65 @@ function global:au_SearchReplace {
 function Get-AdoptOpenJDK {
 param (
     [string]$number,
-    [string]$build,
+    [string]$type = 'jre',       # jdk or jre
+    [string]$build = 'releases', # nightly for pre-releases
 	[string]$jvm = 'hotspot'
 )
 
-	# write-host "P number -$number- build -$build- jvm -$jvm-"
+    $releases = "https://api.adoptopenjdk.net/v2/info/${build}/openjdk${number}?openjdk_impl=${jvm}&os=windows&arch=x32&arch=x64&release=latest&type=${type}"
+    $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json 
+#    $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json | Out-File "${env:temp}\Adoptopenjdk\${build}_${type}${number}_${jvm}.log"
+    $urls = $download_page.binaries.binary_link | where { $_ -match "x64|x86"} | select -Last 6
 
-    $releases = "${PreUrl}/AdoptOpenJDK/openjdk${number}-binaries/releases"
-    $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing
-    $url32  = $download_page.links | ? { $_.href -match "(.+)${build}_x86(.+)${jvm}(.+)\.zip$" } | select -First 1 -expand href
-    $url64  = $download_page.links | ? { $_.href -match "(.+)${build}_x64(.+)${jvm}(.+)\.zip$" } | select -First 1 -expand href 
+    $url32 = $urls | where { $_ -match "x86"} | select -Last 1
 
-    if ($url32 -match '(\du)(\d+){3}(b)(\d+){2,3}') {
-    $version = ( $Matches[0] ) -replace('[u]','.0.') -replace('(b)','.')
-    }
-    # write-host "A number -$number-"
-    if (( $number -eq 9 )) {
-    # write-host "B number -$number-"
-    $url64 -match '(\d+_\d+)' | Out-Null
-    $version = ( $Matches[0] ) -replace('_','.0.')
-    } 
-    if (( $number -eq 10 )) {
-    # write-host "C number -$number-"
-    $version = ( Get-Version (($url64) -replace('%2B','.')) )
-    }
-    if (( $number -eq 11 )-or ( $number -eq 12 )) {
-    # write-host "D number -$number-"
-    $version = ( Get-Version (($url64) -replace('-','.')) )
-    }
-    # write-host "E jvm -$jvm-"
-    $JavaVM = @{$true="${build}${number}";$false="${build}${number}-${jvm}"}[ ( $jvm -match "hotspot" ) ]
-    # write-host "F JavaVM -$JavaVM-"
-    # write-host "Z version -$version-"
+    $url64 =  $urls | where { $_ -match "x64"} | select -Last 1
 
+		if ($url32 -match '(\du)(\d+){3}(b)(\d+){2,3}') {
+		$version = ( $Matches[0] ) -replace('[u]','.0.') -replace('(b)','.')
+		}
+		# write-host "A number -$number-"
+		if (( $number -eq 9 ) -or ( $number -eq 10 ) -or ( $number -eq 11 )-or ( $number -eq 12 )) {
+		# write-host "C number -$number-"
+		$version = ( Get-Version (($url64) -replace('%2B','.')) )
+		}
+		$JavaVM = @{$true="${type}${number}";$false="${type}${number}-${jvm}"}[ ( $jvm -match "hotspot" ) ]
+		# write-host "F JavaVM -$JavaVM-"
+        # write-host "Z version -$version-"
     #build stream hashtable return
-    if (( $url32 -ne $null) -or ($url64 -ne $null )){
     $hotspot = @{}
-        if ($url32 -ne $null) { $hotspot.Add( 'URL32', $PreUrl + $url32 ) }
-        if ($url64 -ne $null) { $hotspot.Add( 'URL64', $PreUrl + $url64 ) }
+        if ($url32 -ne $null) { $hotspot.Add( 'URL32', $url32 ) }
+        if ($url64 -ne $null) { $hotspot.Add( 'URL64', $url64 ) }
         $hotspot.Add( 'Version', $version )
-        $hotspot.Add( 'Title', "AdoptOpenJDK ${jvm} ${build}${number} ${version}" )
-		write-host "H PackageName -AdoptOpenJDK-${JavaVM}${number}-"
+        $hotspot.Add( 'Title', "AdoptOpenJDK ${type}${number} ${jvm} ${version}" )
+#		write-host "H PackageName -AdoptOpenJDK-${JavaVM}-"
         $hotspot.Add( 'PackageName', "AdoptOpenJDK-${JavaVM}" )
-    }
 
     return ( $hotspot )
 }
 
-
 function global:au_GetLatest {
   $streams = [ordered] @{
-    jre8_hotspot = Get-AdoptOpenJDK -number "8" -build "jre"
-    jdk8_hotspot = Get-AdoptOpenJDK -number "8" -build "jdk"
-    jre8_openj9 = Get-AdoptOpenJDK -number "8" -build "jre" -jvm "openj9"
-    jdk8_openj9 = Get-AdoptOpenJDK -number "8" -build "jdk" -jvm "openj9"
-    jre9_hotspot = Get-AdoptOpenJDK -number "9" -build "jre"
-    jdk9_hotspot = Get-AdoptOpenJDK -number "9" -build "jdk"
-    # jre9_openj9 = Get-AdoptOpenJDK -number "9" -build "jre" -jvm "openj9"
-    # jdk9_openj9 = Get-AdoptOpenJDK -number "9" -build "jdk" -jvm "openj9"
-    jre10_hotspot = Get-AdoptOpenJDK -number "10" -build "jre"
-    jdk10_hotspot = Get-AdoptOpenJDK -number "10" -build "jdk"
-    # jre10_openj9 = Get-AdoptOpenJDK -number "9" -build "jre" -jvm "openj9"
-    # jdk10_openj9 = Get-AdoptOpenJDK -number "9" -build "jdk" -jvm "openj9"
-    jre11_hotspot = Get-AdoptOpenJDK -number "11" -build "jre"
-    jdk11_hotspot = Get-AdoptOpenJDK -number "11" -build "jdk"
-    jre11openj9 = Get-AdoptOpenJDK -number "11" -build "jre" -jvm "openj9"
-    jdk11openj9 = Get-AdoptOpenJDK -number "11" -build "jdk" -jvm "openj9"
-    jre12_hotspot = Get-AdoptOpenJDK -number "12" -build "jre"
-    jdk12_hotspot = Get-AdoptOpenJDK -number "12" -build "jdk"
-    jre12_openj9 = Get-AdoptOpenJDK -number "12" -build "jre" -jvm "openj9"
-    jdk12_openj9 = Get-AdoptOpenJDK -number "12" -build "jdk" -jvm "openj9"
+    jre8_hotspot = Get-AdoptOpenJDK -number "8" -type "jre"
+    jdk8_hotspot = Get-AdoptOpenJDK -number "8" -type "jdk"
+    jre8_openj9 = Get-AdoptOpenJDK -number "8" -type "jre" -jvm "openj9"
+    jdk8_openj9 = Get-AdoptOpenJDK -number "8" -type "jdk" -jvm "openj9"
+    jre9_hotspot = Get-AdoptOpenJDK -number "9" -type "jre"
+    jdk9_hotspot = Get-AdoptOpenJDK -number "9" -type "jdk"
+    # jre9_openj9 = Get-AdoptOpenJDK -number "9" -type "jre" -jvm "openj9"
+    jdk9_openj9 = Get-AdoptOpenJDK -number "9" -type "jdk" -jvm "openj9"
+    # jre10_hotspot = Get-AdoptOpenJDK -number "10" -type "jre"
+    jdk10_hotspot = Get-AdoptOpenJDK -number "10" -type "jdk"
+    # jre10_openj9 = Get-AdoptOpenJDK -number "10" -type "jre" -jvm "openj9"
+    jdk10_openj9 = Get-AdoptOpenJDK -number "10" -type "jdk" -jvm "openj9"
+    jre11_hotspot = Get-AdoptOpenJDK -number "11" -type "jre"
+    jdk11_hotspot = Get-AdoptOpenJDK -number "11" -type "jdk"
+    jre11openj9 = Get-AdoptOpenJDK -number "11" -type "jre" -jvm "openj9"
+    jdk11openj9 = Get-AdoptOpenJDK -number "11" -type "jdk" -jvm "openj9"
+    jre12_hotspot = Get-AdoptOpenJDK -number "12" -type "jre"
+    jdk12_hotspot = Get-AdoptOpenJDK -number "12" -type "jdk"
+    jre12_openj9 = Get-AdoptOpenJDK -number "12" -type "jre" -jvm "openj9"
+    jdk12_openj9 = Get-AdoptOpenJDK -number "12" -type "jdk" -jvm "openj9"
   }
 
   return @{ Streams = $streams }
