@@ -4,14 +4,14 @@ $ProgramFiles = @{$true="${env:PROGRAMFILES}";$false="${env:PROGRAMFILES(X86)}"}
 $Dir = @{$true="${PROGRAMFILES}\AdoptOpenJDK";$false="${env:PROGRAMFILES}\AdoptOpenJDK"}[ ( Test-Path "$ProgramFiles" ) ]
 
 $packageArgs = @{
-  PackageName = 'AdoptOpenJDK-jre12'
-  Url = 'https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk12u-2019-05-30-11-00/OpenJDK12U-jre_x86-32_windows_hotspot_2019-05-30-11-00.zip'
+  PackageName = ''
+  Url = ''
   UnzipLocation = $Dir
-  Url64bit = 'https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk12u-2019-05-30-11-00/OpenJDK12U-jre_x64_windows_hotspot_2019-05-30-11-00.zip'
-  Checksum = '655A986BAFCD6F8601F53547CFADD1DBD76F75E1D5C7A2B18CD4FA0E456FF7A2'
-  ChecksumType = 'sha256'
-  Checksum64 = '99CB3C3DD3EAFFA4405BCD5DA5058ED7905382C926B30D4C96EF874C0B52DFCE'
-  ChecksumType64 = 'sha256'
+  Url64bit = ''
+  Checksum = ''
+  ChecksumType = ''
+  Checksum64 = ''
+  ChecksumType64 = ''
   # SoftwareName = 'AdoptOpenJDK hotspot jre12 2019.5.30.11'
 }
 
