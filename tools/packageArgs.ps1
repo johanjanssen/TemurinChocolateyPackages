@@ -1,12 +1,12 @@
 ﻿# Due to a bug in AU. This package requires that all package Arguments be in this hashtable
 
-$ProgramFiles = @{$true="${env:PROGRAMFILES}";$false="${env:PROGRAMFILES(X86)}"}[ ((Get-ProcessorBits) -eq '64') ]
-$Dir = @{$true="${PROGRAMFILES}\AdoptOpenJDK";$false="${env:PROGRAMFILES}\AdoptOpenJDK"}[ ( Test-Path "$ProgramFiles" ) ]
+$ProgramFiles = @{$true="(${env:PROGRAMFILES})";$false="(${env:PROGRAMFILES(X86)})"}[ ((Get-ProcessorBits) -eq '64') ]
+$Dir = @{$true="$PROGRAMFILES";$false="(${env:PROGRAMFILES})"}[ ( Test-Path "$ProgramFiles" ) ]
 
 $packageArgs = @{
   PackageName = ''
   Url = ''
-  UnzipLocation = $Dir
+  UnzipLocation = "$Dir\AdoptOpenJDK"
   Url64bit = ''
   Checksum = ''
   ChecksumType = ''
