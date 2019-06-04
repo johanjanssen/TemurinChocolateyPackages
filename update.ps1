@@ -91,20 +91,3 @@ function global:au_GetLatest {
 }
 
 update -ChecksumFor none
-
-    jdk10_openj9 = Get-AdoptOpenJDK -number "10" -type "jdk" -jvm "openj9"
-    jre11_hotspot = Get-AdoptOpenJDK -number "11" -type "jre"
-    jdk11_hotspot = Get-AdoptOpenJDK -number "11" -type "jdk"
-    jre11openj9 = Get-AdoptOpenJDK -number "11" -type "jre" -jvm "openj9"
-    jdk11openj9 = Get-AdoptOpenJDK -number "11" -type "jdk" -jvm "openj9"
-    jre12_hotspot = Get-AdoptOpenJDK -number "12" -type "jre"
-    jdk12_hotspot = Get-AdoptOpenJDK -number "12" -type "jdk"
-    jre12_openj9 = Get-AdoptOpenJDK -number "12" -type "jre" -jvm "openj9"
-    jdk12_openj9 = Get-AdoptOpenJDK -number "12" -type "jdk" -jvm "openj9"
-  }
-
-  return @{ Streams = $streams }
- 
-}
-
-update -ChecksumFor none

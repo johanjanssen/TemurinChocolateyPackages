@@ -1,6 +1,6 @@
-
+﻿
   $scriptDir = $(Split-Path -parent $MyInvocation.MyCommand.Definition)
-  # Import function to test if JRE is the same version is already installed
+  # Import function to test if JRE is the same version as already installed
   . (Join-Path $scriptDir 'packageArgs.ps1')
 
 $installed = ( Get-InstalledArgs )
