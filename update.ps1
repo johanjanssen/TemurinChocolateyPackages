@@ -35,7 +35,7 @@ param (
 )
 
     $releases = "https://api.adoptopenjdk.net/v2/info/${build}/openjdk${number}?openjdk_impl=${jvm}&os=windows&arch=x32&arch=x64&release=latest&type=${type}"
-    $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json 
+    $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json
     $urls = $download_page.binaries.binary_link | where { $_ -match "x64|x86"} | select -Last 6
 
     $url32 = $urls | where { $_ -match "x86"} | select -Last 1
@@ -45,13 +45,11 @@ param (
 		if ($url32 -match '(\du)(\d+){3}(b)(\d+){2,3}') {
 		$version = ( $Matches[0] ) -replace('[u]','.0.') -replace('(b)','.')
 		}
-		# write-host "A number -$number-"
 		if (( $number -eq 9 ) -or ( $number -eq 10 ) -or ( $number -eq 11 )-or ( $number -eq 12 )) {
-		# write-host "C number -$number-"
 		$version = ( Get-Version (($url64) -replace('%2B','.')) )
 		}
 		$JavaVM = @{$true="${type}${number}";$false="${type}${number}-${jvm}"}[ ( $jvm -match "hotspot" ) ]
-		
+
     #build stream hashtable return
     $hotspot = @{}
         if ($url32 -ne $null) { $hotspot.Add( 'URL32', $url32 ) }
@@ -63,6 +61,7 @@ param (
     return ( $hotspot )
 }
 
+
 function global:au_GetLatest {
   $streams = [ordered] @{
     jre8_hotspot = Get-AdoptOpenJDK -number "8" -type "jre"
@@ -71,11 +70,28 @@ function global:au_GetLatest {
     jdk8_openj9 = Get-AdoptOpenJDK -number "8" -type "jdk" -jvm "openj9"
     jre9_hotspot = Get-AdoptOpenJDK -number "9" -type "jre"
     jdk9_hotspot = Get-AdoptOpenJDK -number "9" -type "jdk"
-    # jre9_openj9 = Get-AdoptOpenJDK -number "9" -type "jre" -jvm "openj9"
+    # jre9_openj9 = Get-AdoptOpenJDK -number "9" -type "jre" -jvm "openj9"       # Package not yet available
     jdk9_openj9 = Get-AdoptOpenJDK -number "9" -type "jdk" -jvm "openj9"
-    # jre10_hotspot = Get-AdoptOpenJDK -number "10" -type "jre"
+    # jre10_hotspot = Get-AdoptOpenJDK -number "10" -type "jre"                  # Package not yet available
     jdk10_hotspot = Get-AdoptOpenJDK -number "10" -type "jdk"
-    # jre10_openj9 = Get-AdoptOpenJDK -number "10" -type "jre" -jvm "openj9"
+    # jre10_openj9 = Get-AdoptOpenJDK -number "10" -type "jre" -jvm "openj9"     # Package not yet available
+    jdk10_openj9 = Get-AdoptOpenJDK -number "10" -type "jdk" -jvm "openj9"
+    jre11_hotspot = Get-AdoptOpenJDK -number "11" -type "jre"
+    jdk11_hotspot = Get-AdoptOpenJDK -number "11" -type "jdk"
+    jre11openj9 = Get-AdoptOpenJDK -number "11" -type "jre" -jvm "openj9"
+    jdk11openj9 = Get-AdoptOpenJDK -number "11" -type "jdk" -jvm "openj9"
+    jre12_hotspot = Get-AdoptOpenJDK -number "12" -type "jre"
+    jdk12_hotspot = Get-AdoptOpenJDK -number "12" -type "jdk"
+    jre12_openj9 = Get-AdoptOpenJDK -number "12" -type "jre" -jvm "openj9"
+    jdk12_openj9 = Get-AdoptOpenJDK -number "12" -type "jdk" -jvm "openj9"
+  }
+
+  return @{ Streams = $streams }
+ 
+}
+
+update -ChecksumFor none
+
     jdk10_openj9 = Get-AdoptOpenJDK -number "10" -type "jdk" -jvm "openj9"
     jre11_hotspot = Get-AdoptOpenJDK -number "11" -type "jre"
     jdk11_hotspot = Get-AdoptOpenJDK -number "11" -type "jdk"
