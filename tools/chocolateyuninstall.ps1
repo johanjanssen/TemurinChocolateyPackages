@@ -1,11 +1,12 @@
-﻿
+
   $scriptDir = $(Split-Path -parent $MyInvocation.MyCommand.Definition)
-  # Import function to test if JRE in the same version is already installed
+  # Import function to test if JRE is the same version is already installed
   . (Join-Path $scriptDir 'packageArgs.ps1')
 
-
+$installed = ( Get-InstalledArgs )
 Uninstall-ChocolateyEnvironmentVariable 'JAVA_HOME' 'Machine'
-rm -r "$targetDir\$installed"
+if (Test-Path "$targetDir\$installed\*") {
+rm -r "$targetDir\$installed" }
 
 $pathToUnInstall = "$targetDir\$installed\bin"
 $pathType = "Machine"
