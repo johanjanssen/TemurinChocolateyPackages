@@ -1,7 +1,6 @@
 ﻿# Due to a bug in AU. This package requires that all package Arguments be in this hashtable
 
-$ProgramFiles = @{$true="(${env:PROGRAMFILES})";$false="(${env:PROGRAMFILES(X86)})"}[ ((Get-ProcessorBits) -eq '64') ]
-$Dir = @{$true="$PROGRAMFILES";$false="(${env:PROGRAMFILES})"}[ ( Test-Path "$ProgramFiles" ) ]
+$Dir = @{$true="${env:PROGRAMFILES}";$false="${env:PROGRAMFILES(X86)}"}[ ((Get-OSArchitectureWidth 64) -and $env:chocolateyForceX86 -ne $true)]
 
 $packageArgs = @{
   PackageName = ''
@@ -12,14 +11,15 @@ $packageArgs = @{
   ChecksumType = ''
   Checksum64 = ''
   ChecksumType64 = ''
-  # SoftwareName = 'AdoptOpenJDK hotspot jre12 2019.5.30.11'
 }
 
-$targetDir = ($packageArgs['UnzipLocation'])
-$build = ($packageArgs['PackageName']) -replace('AdoptOpenJDK-','') -replace('-openj9','') -replace("\d",'')
-$arr = Get-ChildItem $Dir | Where-Object {$_.PSIsContainer} | Foreach-Object {$_.Name -match $build}
-# $jvm = @{$true="hotspot";$false="openj9"}[($packageArgs['Softwarename'] -match 'hotspot')]
-# $name = ($packageArgs['Softwarename']) -split(' ')
-# $version = $name[-1]
-write-host "The installed dir is -$arr-"
-$installed = $arr
+$targetDir = ( $packageArgs['UnzipLocation'] )
+
+function Get-InstalledArgs {
+$regex_hotspot = "(?:[jdkre]+)\-\d+\.\d\.\d+(.)\d+\-(?:[jdkrehotp]+)"
+$regex = @{$true="(?:[jdkre]+)\d[u]\d+\-[b]\d+\-(?:[jdkre]+)";$false="(?:[jdkre]+)\-\d+\.\d\.\d+(.)\d+\-(?:[jdkre]+)"}[ (($packageArgs['PackageName'] -replace('[a-zA-Z]+\-[a-zA-Z]+','')) -eq "8")]
+$build = @{$true="$regex_hotspot";$false="$regex"}[ ($packageArgs['PackageName'] -match "hotspot")]
+$arr = Get-ChildItem $targetDir | Where-Object {$_.PSIsContainer} | Foreach-Object {$_.Name -match $build}
+$installed = @{$true=$Matches[0];$false="WeAreBad"}[ ($Matches[0] -ne "") ]
+return ( $installed )
+}
