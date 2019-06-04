@@ -18,7 +18,6 @@ function global:au_SearchReplace {
 			"(?i)(^\s*ChecksumType\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType32)'"
 			"(?i)(^\s*Checksum64\s*=\s*)('.*')" = "`$1'$($Latest.Checksum64)'"
 			"(?i)(^\s*ChecksumType64\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType64)'"
-			# "(?i)(^\s*SoftwareName\s*=\s*)('.*')" = "`$1'$($Latest.Title)'"
 		}
     ".\adoptopenjdk.nuspec" = @{
 			"(?i)(^\s*\<id\>).*(\<\/id\>)" = "`${1}$($Latest.PackageName)`${2}"
@@ -32,12 +31,11 @@ param (
     [string]$number,
     [string]$type = 'jre',       # jdk or jre
     [string]$build = 'releases', # nightly for pre-releases
-	[string]$jvm = 'hotspot'
+    [string]$jvm = 'hotspot'
 )
 
     $releases = "https://api.adoptopenjdk.net/v2/info/${build}/openjdk${number}?openjdk_impl=${jvm}&os=windows&arch=x32&arch=x64&release=latest&type=${type}"
     $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json 
-#    $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json | Out-File "${env:temp}\Adoptopenjdk\${build}_${type}${number}_${jvm}.log"
     $urls = $download_page.binaries.binary_link | where { $_ -match "x64|x86"} | select -Last 6
 
     $url32 = $urls | where { $_ -match "x86"} | select -Last 1
@@ -53,15 +51,13 @@ param (
 		$version = ( Get-Version (($url64) -replace('%2B','.')) )
 		}
 		$JavaVM = @{$true="${type}${number}";$false="${type}${number}-${jvm}"}[ ( $jvm -match "hotspot" ) ]
-		# write-host "F JavaVM -$JavaVM-"
-        # write-host "Z version -$version-"
+		
     #build stream hashtable return
     $hotspot = @{}
         if ($url32 -ne $null) { $hotspot.Add( 'URL32', $url32 ) }
         if ($url64 -ne $null) { $hotspot.Add( 'URL64', $url64 ) }
         $hotspot.Add( 'Version', $version )
         $hotspot.Add( 'Title', "AdoptOpenJDK ${type}${number} ${jvm} ${version}" )
-#		write-host "H PackageName -AdoptOpenJDK-${JavaVM}-"
         $hotspot.Add( 'PackageName', "AdoptOpenJDK-${JavaVM}" )
 
     return ( $hotspot )
