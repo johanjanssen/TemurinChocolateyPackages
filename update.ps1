@@ -73,7 +73,9 @@ param (
 		    }
         }
 
-		$JavaVM = @{$true="${type}${number}";$false="${type}${number}-${jvm}"}[ ( $jvm -match "hotspot" ) ]
+        $version = $version -replace("\-","."); if ($version -ne $null) { $version = ( Get-Version "${version}" ) }
+
+	$JavaVM = @{$true="${type}${number}";$false="${type}${number}-${jvm}"}[ ( $jvm -match "hotspot" ) ]
         $beta = @{$true="${version}";$false="${version}-${build}"}[ ($build -eq "releases") ]
 
     #build stream hashtable return
