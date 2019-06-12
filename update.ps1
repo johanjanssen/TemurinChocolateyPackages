@@ -48,7 +48,7 @@ param (
 
     $url64 =  $urls | where { $_ -match "x64"} | select -Last 1
     
-    } else { Write-Verbose "this is a bad request"; }
+    } else { Write-Verbose "this is a bad request"; break;}
 
         if ($build -eq "nightly") {
         $fN = ($download_page.binaries.binary_name | Select -First 1 )
