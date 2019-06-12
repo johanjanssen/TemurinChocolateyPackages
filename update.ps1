@@ -89,28 +89,56 @@ param (
 
 
 function global:au_GetLatest {
-  $streams = [ordered] @{
-    jre8_hotspot = Get-AdoptOpenJDK -number "8" -type "jre"
-    jdk8_hotspot = Get-AdoptOpenJDK -number "8" -type "jdk"
-    jre8_openj9 = Get-AdoptOpenJDK -number "8" -type "jre" -jvm "openj9"
-    jdk8_openj9 = Get-AdoptOpenJDK -number "8" -type "jdk" -jvm "openj9"
-    jre9_hotspot = Get-AdoptOpenJDK -number "9" -type "jre"
-    jdk9_hotspot = Get-AdoptOpenJDK -number "9" -type "jdk"
-    # jre9_openj9 = Get-AdoptOpenJDK -number "9" -type "jre" -jvm "openj9"       # Package not yet available
-    jdk9_openj9 = Get-AdoptOpenJDK -number "9" -type "jdk" -jvm "openj9"
-    # jre10_hotspot = Get-AdoptOpenJDK -number "10" -type "jre"                  # Package not yet available
-    jdk10_hotspot = Get-AdoptOpenJDK -number "10" -type "jdk"
-    # jre10_openj9 = Get-AdoptOpenJDK -number "10" -type "jre" -jvm "openj9"     # Package not yet available
-    jdk10_openj9 = Get-AdoptOpenJDK -number "10" -type "jdk" -jvm "openj9"
-    jre11_hotspot = Get-AdoptOpenJDK -number "11" -type "jre"
-    jdk11_hotspot = Get-AdoptOpenJDK -number "11" -type "jdk"
-    jre11openj9 = Get-AdoptOpenJDK -number "11" -type "jre" -jvm "openj9"
-    jdk11openj9 = Get-AdoptOpenJDK -number "11" -type "jdk" -jvm "openj9"
-    jre12_hotspot = Get-AdoptOpenJDK -number "12" -type "jre"
-    jdk12_hotspot = Get-AdoptOpenJDK -number "12" -type "jdk"
-    jre12_openj9 = Get-AdoptOpenJDK -number "12" -type "jre" -jvm "openj9"
-    jdk12_openj9 = Get-AdoptOpenJDK -number "12" -type "jdk" -jvm "openj9"
-  }
+$i = 8; $x = 0; $y = 0; $z = 0; $numbers = @("8","9","10","11","12"); $types = @("jre","jdk")
+$jvms = @("hotspot","openj9"); $builds = @("releases","nightly")
+
+  $streams = [ordered] @{}
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+
+}
+$z++; $i--;
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+
+}
+$y++; $z--; $i--;
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+}
+$z++; $i--;
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+
+}
+$x++; $y--; $z--; $i--;
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+
+}
+$y++; $i--;
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+
+}
+$z++; $i--;
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+
+}
+$y--;  $i--;
+foreach ( $j in $numbers ) {
+
+$streams.Add( "$($types[$x])${j}_$($jvms[$y])_$($builds[$z])" , ( Get-AdoptOpenJDK -number $j -type "$($types[$x])" -jvm "$($jvms[$y])" -build "$($builds[$z])" ) )
+
+}
 
   return @{ Streams = $streams }
  
