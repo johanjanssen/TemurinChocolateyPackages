@@ -19,7 +19,7 @@ function global:au_SearchReplace {
             "(?i)(^\s*ChecksumType64\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType64)'"
         }
         ".\adoptopenjdk.nuspec"   = @{
-            "(?i)(^\s*\<id\>).*(\<\/id\>)"       = "`${1}$($Latest.PackageName)`${2}"
+            "(?i)(^\s*\<id\>).*(\<\/id\>)"       = "`${1}$($($Latest.PackageName).ToLower())`${2}"
             "(?i)(^\s*\<title\>).*(\<\/title\>)" = "`${1}$($Latest.Title)`${2}"
         }
     }
