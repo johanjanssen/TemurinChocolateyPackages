@@ -3,7 +3,6 @@ import-module au
 $PreUrl = 'https://github.com'
 
 function global:au_BeforeUpdate {
-    cp "$PSScriptRoot\README.$($Latest.PackageName).md" "$PSScriptRoot\README.md" -Force
     Get-RemoteFiles -Purge -FileNameBase "$($Latest.PackageName)"
 	Remove-Item ".\tools\*.zip" -Force # Removal of downloaded files
 }
