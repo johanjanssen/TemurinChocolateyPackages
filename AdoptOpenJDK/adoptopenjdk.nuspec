@@ -3,7 +3,7 @@
   <metadata>    
     <id>AdoptOpenJDK-jre8</id>
 	<version>8.0.212.03</version>
-	<packageSourceUrl>https://github.com/johanjanssen/ChocolateyPackages/tree/master/AdoptOpenJDK</packageSourceUrl>
+	<packageSourceUrl>https://github.com/johanjanssen/AdoptOpenJDKChocolateyPackages</packageSourceUrl>
     <title>AdoptOpenJDK jre8 hotspot 8.0.212.03</title>
     <authors>AdoptOpenJDK</authors>
 	<owners>JohanJanssen</owners>
