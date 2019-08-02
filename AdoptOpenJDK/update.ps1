@@ -19,8 +19,8 @@ function global:au_SearchReplace {
             "(?i)(^\s*ChecksumType64\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType64)'"
         }
         ".\adoptopenjdk.nuspec"   = @{
-            "(?i)(^\s*\<id\>).*(\<\/id\>)"       = "`${1}$($($Latest.PackageName).ToLower())`${2}"
-            "(?i)(^\s*\<title\>).*(\<\/title\>)" = "`${1}$($Latest.Title)`${2}"
+            "(?i)(^\s*\<id\>).*(\<\/id\>)"                 = "`${1}$($($Latest.PackageName).ToLower())`${2}"
+            "(?i)(^\s*\<title\>).*(\<\/title\>)"           = "`${1}$($Latest.Title)`${2}"
             "(?i)(^\s*\<licenseUrl\>).*(\<\/licenseUrl\>)" = "`${1}$($Latest.LicenseUrl)`${2}"
         }
     }
@@ -100,75 +100,41 @@ function Get-AdoptOpenJDK {
 
 
 function global:au_GetLatest {
-    $type = 0; $vm = 0; $build = 0; $numbers = @("8", "9", "10", "11", "12"); $types = @("jre", "jdk")
+    $numbers = @("8", "9", "10", "11", "12"); $types = @("jre", "jdk")
     # Optionally add "nightly" to $builds
     $jvms = @("hotspot", "openj9"); $builds = @("releases")
 
     $streams = [ordered] @{ }
-    # First
     foreach ( $number in $numbers ) {
+        foreach ( $type in $types) {
+            foreach ( $jvm in $jvms ) {
+                foreach ( $build in $builds ) {        
+                    # Create a package without the version for the latest release
+                    if ( $number -eq $numbers[-1] ) { 
+                        $name = "AdoptOpenJDK"
+                        if ($jvm -eq "openj9") {
+                            $name = $name + $jvm
+                        }
+                        if ($type -eq "jre") {
+                            $name = $name + $type
+                        } 
+                        $streams.Add( "$($type)$($number)_$($jvm)_$($build)_Latest" , ( Get-AdoptOpenJDK -number $number -type $type -jvm $jvm -build $build -dev_name $name ) )
+                    } 
 
-        if ( $number -eq 12 ) { $name = "AdoptOpenJDK$($types[$type])" } elseif (( $number -eq 8 ) -or ( $number -eq 11 )) { $name = "AdoptOpenJDK${number}$($types[$type])" } else { $name = ""; }
+                    $name = "AdoptOpenJDK$number"
+                    if ($jvm -eq "openj9") {
+                        $name = $name + $jvm
+                    }
+                    if ($type -eq "jre") {
+                        $name = $name + $type
+                    }
 
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-
+                    $streams.Add( "$($type)$($number)_$($jvm)_$($build)" , ( Get-AdoptOpenJDK -number $number -type $type -jvm $jvm -build $build -dev_name $name ) )        
+                }
+            }
+        }
     }
-    $build++; $name = ""
-    # Second
-    foreach ( $number in $numbers ) {
-
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-
-    }
-    $vm++; $build--; $name = ""
-    # Third
-    foreach ( $number in $numbers ) {
-
-        if ( $number -eq 12 ) { $name = "AdoptOpenJDK$($jvms[$vm])$($types[$type])" } else { $name = ""; }
-
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-    }
-    $build++; $name = ""
-    # Fourth
-    foreach ( $number in $numbers ) {
-
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-
-    }
-    $type++; $vm--; $build--; $name = ""
-    # Fifth
-    foreach ( $number in $numbers ) {
-
-        if ( $number -eq 12 ) { $name = "AdoptOpenJDK" } elseif (( $number -eq 8 ) -or ( $number -eq 11 )) { $name = "AdoptOpenJDK${number}" } else { $name = ""; }
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-
-    }
-    $vm++; $name = ""
-    # Sixth
-    foreach ( $number in $numbers ) {
-
-        if ( $number -eq 12 ) { $name = "AdoptOpenJDK$($jvms[$vm])$($types[$type])" } else { $name = ""; }
-
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-
-    }
-    $build++; $name = ""
-    # Seventh
-    foreach ( $number in $numbers ) {
-
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-
-    }
-    $vm--; $name = ""
-    # Eighth
-    foreach ( $number in $numbers ) {
-
-        $streams.Add( "$($types[$type])${number}_$($jvms[$vm])_$($builds[$build])" , ( Get-AdoptOpenJDK -number $number -type "$($types[$type])" -jvm "$($jvms[$vm])" -build "$($builds[$build])" -dev_name "${name}" ) )
-
-    }
-
-    return @{ Streams = $streams }
- 
+    return @{ Streams = $streams } 
 }
 
 update -ChecksumFor none
