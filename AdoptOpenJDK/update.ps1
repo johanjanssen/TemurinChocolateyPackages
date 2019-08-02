@@ -21,6 +21,7 @@ function global:au_SearchReplace {
         ".\adoptopenjdk.nuspec"   = @{
             "(?i)(^\s*\<id\>).*(\<\/id\>)"       = "`${1}$($($Latest.PackageName).ToLower())`${2}"
             "(?i)(^\s*\<title\>).*(\<\/title\>)" = "`${1}$($Latest.Title)`${2}"
+            "(?i)(^\s*\<licenseUrl\>).*(\<\/licenseUrl\>)" = "`${1}$($Latest.LicenseUrl)`${2}"
         }
     }
 }
@@ -90,7 +91,8 @@ function Get-AdoptOpenJDK {
     if ($version -ne $null) {
         $hotspot.Add( 'Version', "$beta" )
         $hotspot.Add( 'Title', "AdoptOpenJDK ${type}${number} ${jvm} ${version}" )
-        $hotspot.Add( 'PackageName', "${PackageName}" ) 
+        $hotspot.Add( 'PackageName', "${PackageName}" )
+        $hotspot.Add( 'LicenseUrl', "https://github.com/AdoptOpenJDK/openjdk-jdk${number}u/blob/master/LICENSE" )
     }
 
     return ( $hotspot )
