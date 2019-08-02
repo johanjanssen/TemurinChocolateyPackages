@@ -93,7 +93,8 @@ param (
 
 function global:au_GetLatest {
 $i = 8; $x = 0; $y = 0; $z = 0; $numbers = @("8","9","10","11","12"); $types = @("jre","jdk")
-$jvms = @("hotspot","openj9"); $builds = @("releases","nightly")
+# Optionally add "nightly" to $builds
+$jvms = @("hotspot","openj9"); $builds = @("releases")
 
   $streams = [ordered] @{}
   # First
