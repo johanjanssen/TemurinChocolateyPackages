@@ -4,12 +4,13 @@ $PreUrl = 'https://github.com'
 
 function global:au_BeforeUpdate {
     Get-RemoteFiles -Purge -FileNameBase "$($Latest.PackageName)"
-    Remove-Item ".\tools\*.zip" -Force # Removal of downloaded files
+    Remove-Item ".\tools\*.*" -Force # Removal of all files
+	Copy-Item chocolateyinstall.ps1 -Destination tools
 }
 
 function global:au_SearchReplace {
     @{
-        ".\tools\packageArgs.ps1" = @{
+        ".\tools\chocolateyinstall.ps1" = @{
             "(?i)(^\s*PackageName\s*=\s*)('.*')"    = "`$1'$($Latest.PackageName)'"
             "(?i)(^\s*url\s*=\s*)('.*')"            = "`$1'$($Latest.URL32)'"
             "(?i)(^\s*url64bit\s*=\s*)('.*')"       = "`$1'$($Latest.URL64)'"
@@ -36,7 +37,7 @@ function Get-AdoptOpenJDK {
     )
 
     $regex_1 = "(\d{4}\-\d{2}\-\d{2}\-\d{2}\-\d{2})"
-    $regex_2 = "(OpenJDK(\d{1,2}U|\d{1,2}\.\d\.)\-(jdk|jre)_x(64|86\-32)_([wndois]+)_([htosp]+|[openj9]+))_|(_[openj9]+\-.*)|(\.zip)"
+    $regex_2 = "(OpenJDK(\d{1,2}U|\d{1,2}\.\d\.)\-(jdk|jre)_x(64|86\-32)_([wndois]+)_([htosp]+|[openj9]+))_|(_[openj9]+\-.*)|(\.msi)"
     $releases = "https://api.adoptopenjdk.net/v2/info/${build}/openjdk${number}?openjdk_impl=${jvm}&os=windows&arch=x32&arch=x64&release=latest&type=${type}"
     $t = try { 
         (Invoke-WebRequest -Uri $releases -ErrorAction Stop -UseBasicParsing).BaseResponse
@@ -44,7 +45,7 @@ function Get-AdoptOpenJDK {
     catch [System.Net.WebException] { Write-Verbose "An exception was caught: $($_.Exception.Message)"; $_.Exception.Response }
     if ( $t.StatusCode -eq "OK" ) {    
         $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json
-        $urls = $download_page.binaries.binary_link | where { $_ -match "x64|x86" } | select -Last 6
+        $urls = $download_page.binaries.installer_link | where { $_ -match "x64|x86" } | select -Last 6
 
         $url32 = $urls | where { $_ -match "x86" } | select -Last 1
 
@@ -54,13 +55,13 @@ function Get-AdoptOpenJDK {
     else { Write-Verbose "this is a bad request"; break; }
 
     if ($build -eq "nightly") {
-        $fN = ($download_page.binaries.binary_name | Select -First 1 )
+        $fN = ($download_page.binaries.installer_name | Select -First 1 )
         $version = ( $fN -split "$regex_1" | select -Last 2 | Select -First 1 )
     }
     else {
         if ($number -eq 8) {
-            $name = ( $download_page.binaries.binary_name ) | Select -First 1
-            $name = ( $name ) -replace (".zip", '')
+            $name = ( $download_page.binaries.installer_name ) | Select -First 1
+            $name = ( $name ) -replace (".msi", '')
             $fN = ( $name )
             if ( $jvm -eq 'openj9' ) {
                 $version = (( $fN -split "$regex_2" ) )
@@ -100,7 +101,8 @@ function Get-AdoptOpenJDK {
 
 
 function global:au_GetLatest {
-    $numbers = @("8", "9", "10", "11", "12"); $types = @("jre", "jdk")
+	# Skip 9 and 10 as they don't have MSI's
+    $numbers = @("8", "11", "12"); $types = @("jre", "jdk")
     # Optionally add "nightly" to $builds
     $jvms = @("hotspot", "openj9"); $builds = @("releases")
 

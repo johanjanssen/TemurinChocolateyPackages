@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>    
-    <id>AdoptOpenJDK-jre8</id>
-	<version>8.0.212.03</version>
+    <id>adoptopenjdkopenj9</id>
+	<version>8.0.222.10</version>
 	<packageSourceUrl>https://github.com/johanjanssen/AdoptOpenJDKChocolateyPackages</packageSourceUrl>
-    <title>AdoptOpenJDK jre8 hotspot 8.0.212.03</title>
+    <title>AdoptOpenJDK jdk8 openj9 8.0.222.10</title>
     <authors>AdoptOpenJDK</authors>
 	<owners>JohanJanssen</owners>
-	<licenseUrl>https://github.com/AdoptOpenJDK/openjdk-jdk12u/blob/master/LICENSE</licenseUrl>
+	<licenseUrl>https://github.com/AdoptOpenJDK/openjdk-jdk8u/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://adoptopenjdk.net/</projectUrl>
     <tags>openjdk java jvm</tags>
     <summary>AdoptOpenJDK provides prebuilt OpenJDK build binaries. This one uses Hotspot.</summary>
