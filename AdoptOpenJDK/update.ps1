@@ -102,7 +102,7 @@ function Get-AdoptOpenJDK {
 
 function global:au_GetLatest {
 	# Skip 9 and 10 as they don't have MSI's
-    $numbers = @("8", "11", "12"); $types = @("jre", "jdk")
+    $numbers = @("8", "11", "12", "13"); $types = @("jre", "jdk")
     # Optionally add "nightly" to $builds
     $jvms = @("hotspot", "openj9"); $builds = @("releases")
 
