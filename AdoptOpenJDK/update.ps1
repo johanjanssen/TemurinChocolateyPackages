@@ -74,7 +74,7 @@ function Get-AdoptOpenJDK {
             }
             $version = $version -replace ('[u]', '.0.') -replace ('(b)', '.')
         }
-        if (( $number -eq 9 ) -or ( $number -eq 10 ) -or ( $number -eq 11 ) -or ( $number -eq 12 )) {
+        else {
             $version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
         }
     }
@@ -105,7 +105,7 @@ function global:au_GetLatest {
     $numbers = @("8", "11", "12", "13"); $types = @("jre", "jdk")
     # Optionally add "nightly" to $builds
     $jvms = @("hotspot", "openj9"); $builds = @("releases")
-
+	
     $streams = [ordered] @{ }
     foreach ( $number in $numbers ) {
         foreach ( $type in $types) {
