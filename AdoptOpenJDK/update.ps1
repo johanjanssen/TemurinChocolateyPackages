@@ -72,7 +72,7 @@ function Get-AdoptOpenJDK {
             else {
                 $version = (( $fN -split "$regex_2" ) | Select -Last 1 )
             }
-            $version = $version -replace ('[u]', '.0.') -replace ('(b)', '.')
+            $version = $version -replace ('[u]', '.') -replace ('(b)', '.')
         }
         else {
             $version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
