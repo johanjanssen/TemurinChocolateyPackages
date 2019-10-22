@@ -138,5 +138,5 @@ function global:au_GetLatest {
     }
     return @{ Streams = $streams } 
 }
-
-update -ChecksumFor none
+# Optionally add '-NoCheckChocoVersion' below to create packages for versions that already exist on the Chocolatey server.
+update -ChecksumFor none 
