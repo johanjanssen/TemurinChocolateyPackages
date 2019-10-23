@@ -74,6 +74,13 @@ function Get-AdoptOpenJDK {
             }
             $version = $version -replace ('[u]', '.') -replace ('(b)', '.')
         }
+		# Fix as the first release was 13.33, so by default the next release 13.0.1 would never be used. So instead make it 13.101
+		elseIf ($number -eq 13){
+			$version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
+			$thirteenversion = $version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
+			$version = $version -replace ("13.0.", "13.10");
+			
+		}
         else {
             $version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
         }
@@ -91,7 +98,13 @@ function Get-AdoptOpenJDK {
     if ($url64 -ne $null) { $hotspot.Add( 'URL64', $url64 ) }
     if ($version -ne $null) {
         $hotspot.Add( 'Version', "$beta" )
-        $hotspot.Add( 'Title', "AdoptOpenJDK ${type}${number} ${jvm} ${version}" )
+		# Fix as the first release was 13.33, so by default the next release 13.0.1 would never be used. So instead make it 13.101
+		if ($number -eq 13){
+			$hotspot.Add( 'Title', "AdoptOpenJDK ${type}${number} ${jvm} version ${thirteenversion} not ${version} (due to version mistake in the past)" )
+		}
+		else {
+		    $hotspot.Add( 'Title', "AdoptOpenJDK ${type}${number} ${jvm} ${version}" )
+		}
         $hotspot.Add( 'PackageName', "${PackageName}" )
         $hotspot.Add( 'LicenseUrl', "https://github.com/AdoptOpenJDK/openjdk-jdk${number}u/blob/master/LICENSE" )
     }
