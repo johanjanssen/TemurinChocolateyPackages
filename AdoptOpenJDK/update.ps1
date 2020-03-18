@@ -79,11 +79,18 @@ function Get-AdoptOpenJDK {
 			$version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
 			$thirteenversion = $version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
 			$version = $version -replace ("13.0.", "13.10");
-			
 		}
         else {
             $version = if ($url64 -ne $null) { ( Get-Version (($url64) -replace ('%2B', '.')) ) }
         }
+		# Fix the issue that the first major release is x instead of x.0.0
+		# Count number of "." in the version. If it's 1 then we need to change the version
+		$numberOfDots = [regex]::matches($version,"\.").count
+		if ($numberOfDots -eq 1) {
+			$version = ($version -split '\.')[0]
+			$version = "$version.0.0"
+		}
+		Write-Host "############ version:  $version"
     }
 
     $version = $version -replace ("\-", "."); if ($version -ne $null) { $version = ( Get-Version "${version}" ) }
@@ -115,7 +122,7 @@ function Get-AdoptOpenJDK {
 
 function global:au_GetLatest {
 	# Skip 9 and 10 as they don't have MSI's
-    $numbers = @("8", "11", "12", "13"); $types = @("jre", "jdk")
+    $numbers = @("8", "11", "14"); $types = @("jre", "jdk")
     # Optionally add "nightly" to $builds
     $jvms = @("hotspot", "openj9"); $builds = @("releases")
 	
