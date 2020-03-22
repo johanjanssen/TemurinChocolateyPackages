@@ -7,7 +7,7 @@ function global:au_BeforeUpdate {
     Remove-Item ".\tools\*.*" -Force # Removal of all files
 	Copy-Item chocolateyinstall.ps1 -Destination tools
 }
-
+#A Windows 32-bit version is also available for OpenJ9 but only for JDK8.
 function global:au_SearchReplace {
     @{
         ".\tools\chocolateyinstall.ps1" = @{
@@ -45,11 +45,18 @@ function Get-AdoptOpenJDK {
     catch [System.Net.WebException] { Write-Verbose "An exception was caught: $($_.Exception.Message)"; $_.Exception.Response }
     if ( $t.StatusCode -eq "OK" ) {    
         $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json
-        $urls = $download_page.binaries.installer_link | where { $_ -match "x64|x86" } | select -Last 6
+		# Remove the large heap URL, as only normal 32 and 64 bit are supported
+        $urls = $download_page.binaries.installer_link | where { $_ -match "x64|x86" -And $_ -NotMatch "windowsXL"} | select -Last 6
+
+		Write-Host $urls -ForegroundColor red
 
         $url32 = $urls | where { $_ -match "x86" } | select -Last 1
+		
+		Write-Host $url32 -ForegroundColor red
 
         $url64 = $urls | where { $_ -match "x64" } | select -Last 1
+		
+		Write-Host $url64 -ForegroundColor red
     
     }
     else { Write-Verbose "this is a bad request"; break; }
@@ -90,6 +97,8 @@ function Get-AdoptOpenJDK {
 			$version = ($version -split '\.')[0]
 			$version = "$version.0.0"
 		}
+		$version = $version -replace ("14.36.1", "14.0.0.1")
+
 		Write-Host "############ version:  $version"
     }
 
@@ -159,4 +168,4 @@ function global:au_GetLatest {
     return @{ Streams = $streams } 
 }
 # Optionally add '-NoCheckChocoVersion' below to create packages for versions that already exist on the Chocolatey server.
-update -ChecksumFor none 
+update -ChecksumFor none
