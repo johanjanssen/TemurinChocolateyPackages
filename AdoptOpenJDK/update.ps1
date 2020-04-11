@@ -128,82 +128,41 @@ Write-Verbose "$me url32 -$url32- url64 -$url64-"
 }
 
 function global:au_GetLatest {
+# Skip 9 and 10 as they don't have MSI's
+$numbers = @("8", "11", "13", "14"); $types = @("jre", "jdk")
+# Optionally add "nightly" to $builds
+$jvms = @("hotspot", "openj9"); $builds = @("ga"); $os = "windows"
 
-  $streams = [ordered] @{
-	<# Version 8 Stable #>
-	AdoptOpenJDK8jdk = Get-OpenSourceJDK -number 8 -release ga -OS windows -type jdk -jvm hotspot -ext
-	AdoptOpenJDK8jre = Get-OpenSourceJDK -number 8 -release ga -OS windows -type jre -jvm hotspot -ext
-	AdoptOpenJDK8openj9jdk = Get-OpenSourceJDK -number 8 -release ga -OS windows -type jdk -jvm openj9 -ext
-	AdoptOpenJDK8openj9jre = Get-OpenSourceJDK -number 8 -release ga -OS windows -type jre -jvm openj9 -ext
-	# <# Version 9 Stable #>
-	# AdoptOpenJDK9jdk = Get-OpenSourceJDK -number 9 -release ga -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK9jre = Get-OpenSourceJDK -number 9 -release ga -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK9openj9jdk = Get-OpenSourceJDK -number 9 -release ga -OS windows -type jdk -jvm openj9 -ext
-#	AdoptOpenJDK9openj9jre = Get-OpenSourceJDK -number 9 -release ga -OS windows -type jre -jvm openj9 -ext
-	# <# Version 10 Stable #>
-	# AdoptOpenJDK10jdk = Get-OpenSourceJDK -number 10 -release ga -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK10jre = Get-OpenSourceJDK -number 10 -release ga -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK10openj9jdk = Get-OpenSourceJDK -number 10 -release ga -OS windows -type jdk -jvm openj9 -ext
-#	AdoptOpenJDK8openj9jre = Get-OpenSourceJDK -number 10 -release ga -OS windows -type jre -jvm openj9 -ext
-	<# Version 11 Stable #>
-	AdoptOpenJDK11jdk = Get-OpenSourceJDK -number 11 -release ga -OS windows -type jdk -jvm hotspot -ext
-	AdoptOpenJDK11jre = Get-OpenSourceJDK -number 11 -release ga -OS windows -type jre -jvm hotspot -ext
-	AdoptOpenJDK11openj9jdk = Get-OpenSourceJDK -number 11 -release ga -OS windows -type jdk -jvm openj9 -ext
-	AdoptOpenJDK11openj9jre = Get-OpenSourceJDK -number 11 -release ga -OS windows -type jre -jvm openj9 -ext
-	<# Version 12 Stable #>
-	AdoptOpenJDK12jdk = Get-OpenSourceJDK -number 12 -release ga -OS windows -type jdk -jvm hotspot -ext
-	AdoptOpenJDK12jre = Get-OpenSourceJDK -number 12 -release ga -OS windows -type jre -jvm hotspot -ext
-	AdoptOpenJDK12openj9jdk = Get-OpenSourceJDK -number 12 -release ga -OS windows -type jdk -jvm openj9 -ext
-	AdoptOpenJDK12openj9jre = Get-OpenSourceJDK -number 12 -release ga -OS windows -type jre -jvm openj9 -ext
-	<# Version 13 Stable #>
-	AdoptOpenJDK13jdk = Get-OpenSourceJDK -number 13 -release ga -OS windows -type jdk -jvm hotspot -ext
-	AdoptOpenJDK13jre = Get-OpenSourceJDK -number 13 -release ga -OS windows -type jre -jvm hotspot -ext
-	AdoptOpenJDK13openj9jdk = Get-OpenSourceJDK -number 13 -release ga -OS windows -type jdk -jvm openj9 -ext
-	AdoptOpenJDK13openj9jre = Get-OpenSourceJDK -number 13 -release ga -OS windows -type jre -jvm openj9 -ext
-	<# Version 14 Stable #>
-	AdoptOpenJDK14jdk = Get-OpenSourceJDK -number 14 -release ga -OS windows -type jdk -jvm hotspot -ext
-	AdoptOpenJDK14jre = Get-OpenSourceJDK -number 14 -release ga -OS windows -type jre -jvm hotspot -ext
-	AdoptOpenJDK14openj9jdk = Get-OpenSourceJDK -number 14 -release ga -OS windows -type jdk -jvm openj9 -ext
-	AdoptOpenJDK14openj9jre = Get-OpenSourceJDK -number 14 -release ga -OS windows -type jre -jvm openj9 -ext
-	<# Version 8 Early Release #>
-	# AdoptOpenJDK8jdk_nightly = Get-OpenSourceJDK -number 8 -release ea -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK8jre_nightly = Get-OpenSourceJDK -number 8 -release ea -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK8openj9jdk_nightly = Get-OpenSourceJDK -number 8 -release ea -OS windows -type jdk -jvm openj9 -ext
-	# AdoptOpenJDK8openj9jre_nightly = Get-OpenSourceJDK -number 8 -release ea -OS windows -type jre -jvm openj9 -ext
-	<# Version 9 Early Release #>
-	# AdoptOpenJDK9jdk_nightly = Get-OpenSourceJDK -number 9 -release ea -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK9jre_nightly = Get-OpenSourceJDK -number 9 -release ea -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK9openj9jdk_nightly_nightly = Get-OpenSourceJDK -number 9 -release ea -OS windows -type jdk -jvm openj9 -ext
-	# AdoptOpenJDK9openj9jre_nightly = Get-OpenSourceJDK -number 9 -release ea -OS windows -type jre -jvm openj9 -ext
-	<# Version 10 Early Release #>
-	# AdoptOpenJDK10jdk_nightly = Get-OpenSourceJDK -number 10 -release ea -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK10jre_nightly = Get-OpenSourceJDK -number 10 -release ea -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK10openj9jdk_nightly = Get-OpenSourceJDK -number 10 -release ea -OS windows -type jdk -jvm openj9 -ext
-	# AdoptOpenJDK10openj9jre_nightly = Get-OpenSourceJDK -number 10 -release ea -OS windows -type jre -jvm openj9 -ext
-	<# Version 11 Early Release #>
-	# AdoptOpenJDK11jdk_nightly = Get-OpenSourceJDK -number 11 -release ea -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK11jre_nightly = Get-OpenSourceJDK -number 11 -release ea -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK11openj9jdk_nightly = Get-OpenSourceJDK -number 11 -release ea -OS windows -type jdk -jvm openj9 -ext
-	# AdoptOpenJDK11openj9jre_nightly = Get-OpenSourceJDK -number 11 -release ea -OS windows -type jre -jvm openj9 -ext
-	<# Version 12 Early Release #>
-	# AdoptOpenJDK12jdk_nightly = Get-OpenSourceJDK -number 12 -release ea -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK12jre_nightly = Get-OpenSourceJDK -number 12 -release ea -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK12openj9jdk_nightly = Get-OpenSourceJDK -number 12 -release ea -OS windows -type jdk -jvm openj9 -ext
-	# AdoptOpenJDK12openj9jre_nightly = Get-OpenSourceJDK -number 12 -release ea -OS windows -type jre -jvm openj9 -ext
-	<# Version 13 Early Release #>
-	# AdoptOpenJDK13jdk_nightly = Get-OpenSourceJDK -number 13 -release ea -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK13jre_nightly = Get-OpenSourceJDK -number 13 -release ea -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK13openj9jdk_nightly = Get-OpenSourceJDK -number 13 -release ea -OS windows -type jdk -jvm openj9 -ext
-	# AdoptOpenJDK13openj9jre_nightly = Get-OpenSourceJDK -number 13 -release ea -OS windows -type jre -jvm openj9 -ext
-	<# Version 14 Early Release #>
-	# AdoptOpenJDK14jdk_nightly = Get-OpenSourceJDK -number 14 -release ea -OS windows -type jdk -jvm hotspot -ext
-	# AdoptOpenJDK14jre_nightly = Get-OpenSourceJDK -number 14 -release ea -OS windows -type jre -jvm hotspot -ext
-	# AdoptOpenJDK14openj9jdk_nightly = Get-OpenSourceJDK -number 14 -release ea -OS windows -type jdk -jvm openj9 -ext
-	# AdoptOpenJDK14openj9jre_nightly = Get-OpenSourceJDK -number 14 -release ea -OS windows -type jre -jvm openj9 -ext
-  }
-	
-  return @{ Streams = $streams }
- 
+$streams = [ordered] @{ }
+foreach ( $number in $numbers ) {
+	foreach ( $type in $types) {
+		foreach ( $jvm in $jvms ) {
+			foreach ( $build in $builds ) {        
+				# Create a package without the version for the latest release
+				if ( $number -eq $numbers[-1] ) { 
+					$name = "AdoptOpenJDK"
+					if ($jvm -eq "openj9") {
+						$name = $name + $jvm
+					}
+					if ($type -eq "jre") {
+						$name = $name + $type
+					} 
+					$streams.Add( "$($type)$($number)_$($jvm)_$($build)_Latest" , ( Get-OpenSourceJDK -number $number -type $type -jvm $jvm -OS $os -release $build -dev_name $name -ext ) )
+				} 
+
+				$name = "AdoptOpenJDK$number"
+				if ($jvm -eq "openj9") {
+					$name = $name + $jvm
+				}
+				if ($type -eq "jre") {
+					$name = $name + $type
+				}
+				$streams.Add( "$($type)$($number)_$($jvm)_$($build)" , ( Get-OpenSourceJDK -number $number -type $type -jvm $jvm -OS $os -release $build -dev_name $name -ext ) )        
+			}
+		}
+	}
+}
+return @{ Streams = $streams } 
 }
 
 update -ChecksumFor none -NoCheckUrl
