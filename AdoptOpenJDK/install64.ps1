@@ -7,11 +7,11 @@ $toolsDir = @{$true="${env:ProgramFiles}\AdoptOpenJDK";$false="${env:programfile
 $pp = ( Test-PackageParamaters (Get-PackageParameters) ).ToString() -replace('\=""\;','')
 
 $packageArgs = @{
-  PackageName = 'AdoptOpenJDK-jre8'
-  Url64bit = 'https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u-2020-04-02-00-08/OpenJDK8U-jre_x64_windows_hotspot_2020-04-02-00-08.zip'
-  Checksum64 = '8E1494FDC4CBD359231FA92BC4C6C71DACBCA4C2228279DF18AC4422DFD385AB'
-  ChecksumType64 = 'sha256'
-  fileType      = 'msi'
+  PackageName = ''
+  Url64bit = ''
+  Checksum64 = ''
+  ChecksumType64 = ''
+  fileType      = ''
   SilentArgs = "$pp"
 }
 
