@@ -9,7 +9,7 @@
 		<owners>JohanJanssen</owners>
 		<licenseUrl></licenseUrl>
 		<projectUrl>https://adoptopenjdk.net/</projectUrl>
-		<iconUrl>http://cdn.rawgit.com/johanjanssen/AdoptOpenJDKChocolateyPackages/AdoptOpenJDK/AdoptOpenJDK.png</iconUrl>
+		<iconUrl>https://raw.githubusercontent.com/johanjanssen/AdoptOpenJDKChocolateyPackages/master/AdoptOpenJDK/AdoptOpenJDK.png</iconUrl>
 		<tags>openjdk java jvm</tags>
 		<summary>AdoptOpenJDK provides prebuilt OpenJDK build binaries. This one uses OpenJDK_HotSpot.</summary>
 		<description></description>
