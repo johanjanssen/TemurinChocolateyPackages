@@ -12,11 +12,11 @@ Update-TypeData -TypeName System.Collections.HashTable `
 function Test-PackageParamaters {
 [CmdletBinding()]
 param(
-    [hashtable]$hash
+    [hashtable]$pp
 )
 $New_pp = @{}; $toolsDir = "${env:ProgramFiles}\AdoptOpenJDK"
 	if ([string]::IsNullOrEmpty($pp.quiet)) {
-		$New_pp.add( "/quiet", $null )
+		$New_pp.add( "/quiet", $true )
 	}
 	if (![string]::IsNullOrEmpty($pp.transforms)) {
 		$New_pp.add( "/transforms", $pp.transforms )
@@ -59,17 +59,7 @@ $New_pp = @{}; $toolsDir = "${env:ProgramFiles}\AdoptOpenJDK"
 
 	}
 	if (![string]::IsNullOrEmpty($pp.INSTALLLEVEL) ) {
-	    switch ($pp.INSTALLLEVEL) {
-            "1" {
-                $New_pp.add( "/INSTALLLEVEL", "1" )
-            }
-            "2" {
-                $New_pp.add( "/INSTALLLEVEL", "2" )
-            }
-            "3" {
-                $New_pp.add( "/INSTALLLEVEL", "3" )
-            }
-        }
+		$New_pp.add( "INSTALLLEVEL", $pp.INSTALLLEVEL )
 	}
 
 return $New_pp
