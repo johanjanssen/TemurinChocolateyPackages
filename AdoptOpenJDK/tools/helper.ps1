@@ -17,17 +17,20 @@ param(
 $New_pp = @{}; $toolsDir = "${env:ProgramFiles}\AdoptOpenJDK"
 	if ([string]::IsNullOrEmpty($pp.quiet)) {
 		$New_pp.add( "/quiet", $true )
+	} else {
+	# Added to make sure the /quiet silent install is carried over if the user adds it to the params switch list
+		$New_pp.add( "/quiet", $true )
 	}
 	if (![string]::IsNullOrEmpty($pp.transforms)) {
-		$New_pp.add( "/transforms", $pp.transforms )
+		$New_pp.add( "transforms", $pp.transforms )
 	}
     if (![string]::IsNullOrEmpty($pp.INSTALLDIR) -and (($New_pp.ADDLOCAL -match "FeatureMain") -or ($pp.ADDLOCAL -match "FeatureMain")) -and ([string]::IsNullOrEmpty($pp.INSTALLLEVEL)) ) {
 	    Write-Warning "You must use INSTALLDIR with FeatureMain."
         Write-Warning "Using provided $($pp.INSTALLDIR)"
-        $New_pp.add( "/InstallDir", $pp.INSTALLDIR )
+        $New_pp.add( "InstallDir", $pp.INSTALLDIR )
     } elseif ([string]::IsNullOrEmpty($pp.INSTALLDIR) -and (($New_pp.ADDLOCAL -match "FeatureMain") -or ($pp.ADDLOCAL -match "FeatureMain")) -and ([string]::IsNullOrEmpty($pp.INSTALLLEVEL)) ) { 
 	    Write-Warning "Using Default of $toolsDir"
-	    $New_pp.add( "/InstallDir", "$toolsDir" )
+	    $New_pp.add( "InstallDir", "$toolsDir" )
     }
 	if ((![string]::IsNullOrEmpty($pp.ADDLOCAL)) -and ([string]::IsNullOrEmpty($pp.INSTALLLEVEL)) ) {
         Write-Warning "Using Addlocal"
@@ -55,7 +58,7 @@ $New_pp = @{}; $toolsDir = "${env:ProgramFiles}\AdoptOpenJDK"
             }
         }
         Write-Warning "No InstallLevel detected. Defaulting to AddLocal"
-	    $New_pp.add( "/ADDLOCAL", ($pp_addlocal_array -replace ".{1}$") )
+	    $New_pp.add( "ADDLOCAL", ($pp_addlocal_array -replace ".{1}$") )
 
 	}
 	if (![string]::IsNullOrEmpty($pp.INSTALLLEVEL) ) {
