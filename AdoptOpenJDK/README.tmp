@@ -21,8 +21,6 @@
 ** Note: FeatureOracleJavaSoft can be used to prevent Oracle Java launching from PATH when AdoptOpenJDK is uninstalled. Reinstall Oracle Java if you need to restore the Oracle registry keys. **
 
 Optional parameters can be used that group some of the features together:
-These are the preferred Install Levels to pass via params
-Example: `choco install <PackageName> --params="/INSTALLLEVEL=2"'
 
 | Parameter | Features |
 |----|----|
@@ -31,6 +29,8 @@ Example: `choco install <PackageName> --params="/INSTALLLEVEL=2"'
 | &nbsp; INSTALLLEVEL=2 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,<br/> FeatureJavaHome,FeatureIcedTeaWeb &nbsp; |
 |----|----|
 | &nbsp; INSTALLLEVEL=3 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,<br/> FeatureJavaHome,FeatureIcedTeaWeb,FeatureJNLPFileRunWith &nbsp; |
+
+Example: `choco install <PackageName> --params="/INSTALLLEVEL=2"'
 
 The following example silently installs AdoptOpenJDK, updates the PATH, associates .jar files with Java applications and defines JAVA_HOME:
 Example: `choco install <PackageName> --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=c:\Program Files\AdoptOpenJDK\ /quiet"`
