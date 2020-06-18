@@ -30,8 +30,10 @@ Optional parameters can be used that group some of the features together:
 |----|----|
 | &nbsp; INSTALLLEVEL=3 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,<br/> FeatureJavaHome,FeatureIcedTeaWeb,FeatureJNLPFileRunWith &nbsp; |
 
+Example: `choco install <PackageName> --params="/INSTALLLEVEL=2"'
+
 The following example silently installs AdoptOpenJDK, updates the PATH, associates .jar files with Java applications and defines JAVA_HOME:
-Example: `choco install <PackageName> --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome INSTALLDIR=c:\Program Files\AdoptOpenJDK\ /quiet"`
+Example: `choco install <PackageName> --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=c:\Program Files\AdoptOpenJDK\ /quiet"`
 ** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `%Programfiles%\AdoptOpenJDK` **
 
 This will install both the 32 bit and 64 bit versions of the desired package by using the parameter `/both`
