@@ -98,7 +98,11 @@ $links = @{$true=($rest.binaries.installer.link);$false=($rest.binaries.package.
 Write-Verbose "$me links -$links-"
 # Most Feature release version have a 32 & 64 bit version
 if ($links -is [array]) {
-$url32 = $links[-1]; $url64 = $links[0]; Write-Verbose "$me url32 -$url32-"
+  if ($links[0] -match "x64") {
+    $url32 = $links[-1]; $url64 = $links[0]; Write-Verbose "A $me url32 -$url32-"
+	} else {
+    $url32 = $links[0]; $url64 = $links[-1]; Write-Verbose "B $me url32 -$url32-"
+	}
 } else { $url64 = $links }; Write-Verbose "$me url64 -$url64-"
 # Getting the File Extension if prompted
 if ($ext) { $fileType = (( $url64 -split("\\") )[-1] -split("\.") )[-1] }
