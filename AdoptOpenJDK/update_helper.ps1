@@ -180,9 +180,11 @@ $number = ($major, $year, $month, $day) -join "."
 Write-Verbose "$me Using ea versioning number -$number-"
 } elseif ((![string]::IsNullOrEmpty($major) ) -and (![string]::IsNullOrEmpty($minor) ) -and (![string]::IsNullOrEmpty($patch) )) {
 Write-Verbose "$me B major -$major- minor -$minor- patch -$patch-"
+<# BOL Fix for the Current Issue of Version 8 Builds on Chocolatey #>
 if (( $major -eq "8" )) { $minor = $minor+$patch; $patch = $null
     Write-Verbose "$me Detected major as 8 correcting to bad version";
     Write-Verbose "$me B1 Major -$major- Minor -$minor- patch -$patch-" }
+<# EOL Fix for the Current Issue of Version 8 Builds on Chocolatey #>
 $number = ($major, $minor, $patch) -join "."
 Write-Verbose "$me Using semver versioning number -$number-"
 } else {
@@ -230,7 +232,7 @@ $data = $data  -replace( "<$item>" , $($new_info[$i]) )
 $i++
 }
 
-Write-Verbose "data -$data-"
+Write-Verbose "$me data -$data-"
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
 [System.IO.File]::WriteAllLines("$pwd/README.md", $data, $Utf8NoBomEncoding)
 
