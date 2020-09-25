@@ -4,9 +4,9 @@ Update-TypeData -TypeName System.Collections.HashTable `
     -MemberType ScriptMethod `
     -MemberName ToString `
     -Value { $keys = $this.keys; foreach ($key in $keys) { $v = $this[$key]; 
-    if ($key -match "\s") { $hashstr += "`"$key`"" + "=" + "`"$v`"" + ";" }
-    else { $hashstr += $key + "=" + "`"$v`"" + ";" } };
-    return $hashstr }
+             if ($key -match "\s") { $hashstr += "`"$key`"" + "=" + "`"$v`"" + ";" }
+             else { $hashstr += $key + "=" + "`"$v`"" + ";" } };
+             return $hashstr }
 <# Eol Updating of hashtable to string for ToString method #>
 
 function Test-PackageParamaters {
@@ -14,17 +14,18 @@ function Test-PackageParamaters {
 param(
     [hashtable]$pp
 )
-$New_pp = @{}; $toolsDir = "${env:ProgramFiles}\AdoptOpenJDK"
+$New_pp = @{}; 
+$toolsDir = @{$true="${env:ProgramFiles}\AdoptOpenJDK";$false="${env:programfiles(x86)}\AdoptOpenJDK"}[ ((Get-OSArchitectureWidth 64) -or ($env:chocolateyForceX86 -eq $true)) ]
     if (![string]::IsNullOrEmpty($pp.transforms)) {
       $New_pp.add( "transforms", $pp.transforms )
     }
     if (![string]::IsNullOrEmpty($pp.INSTALLDIR) -and (($New_pp.ADDLOCAL -match "FeatureMain") -or ($pp.ADDLOCAL -match "FeatureMain")) -and ([string]::IsNullOrEmpty($pp.INSTALLLEVEL)) ) {
       Write-Warning "You must use INSTALLDIR with FeatureMain."
       Write-Warning "Using provided $($pp.INSTALLDIR)"
-      $New_pp.add( "InstallDir", """$($pp.INSTALLDIR)""" )
+      $New_pp.add( "InstallDir", "`"`"$($pp.INSTALLDIR)`"`"" )
     } elseif ([string]::IsNullOrEmpty($pp.INSTALLDIR) -and (($New_pp.ADDLOCAL -match "FeatureMain") -or ($pp.ADDLOCAL -match "FeatureMain")) -and ([string]::IsNullOrEmpty($pp.INSTALLLEVEL)) ) { 
       Write-Warning "Using Default of $toolsDir"
-      $New_pp.add( "InstallDir", """$toolsDir""" )
+      $New_pp.add( "InstallDir", "`"`"$toolsDir`"`"" )
     }
     if ((![string]::IsNullOrEmpty($pp.ADDLOCAL)) -and ([string]::IsNullOrEmpty($pp.INSTALLLEVEL)) ) {
       Write-Warning "Using Addlocal"
@@ -63,5 +64,6 @@ $New_pp = @{}; $toolsDir = "${env:ProgramFiles}\AdoptOpenJDK"
       # Added to make sure the /quiet silent install is carried over if the user adds it to the params switch list
       $New_pp.add( "/quiet", $true )
     }
+
 return $New_pp
 }
