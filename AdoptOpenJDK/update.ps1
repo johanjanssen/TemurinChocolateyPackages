@@ -22,31 +22,33 @@ function global:au_SearchReplace {
   if ( [string]::IsNullOrEmpty($Latest.URL32) ) {
 		@{
 			".\tools\chocolateyinstall.ps1" = @{
-				"(?i)(^\s*PackageName\s*=\s*)('.*')" = "`$1'$($Latest.PackageName)'"
-				"(?i)(^\s*url64bit\s*=\s*)('.*')"	= "`$1'$($Latest.URL64)'"
-				"(?i)(^\s*Checksum64\s*=\s*)('.*')" = "`$1'$($Latest.Checksum64)'"
-				"(?i)(^\s*ChecksumType64\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType64)'"
+				"(?i)(^\s*PackageName\s*=\s*)('.*')"           = "`$1'$($Latest.PackageName)'"
+				"(?i)(^\s*fileType\s*=\s*)('.*')"              = "`$1'$($Latest.fileType)'"
+				"(?i)(^\s*url64bit\s*=\s*)('.*')"              = "`$1'$($Latest.URL64)'"
+				"(?i)(^\s*Checksum64\s*=\s*)('.*')"            = "`$1'$($Latest.Checksum64)'"
+				"(?i)(^\s*ChecksumType64\s*=\s*)('.*')"        = "`$1'$($Latest.ChecksumType64)'"
 			}
 			".\adoptopenjdk.nuspec" = @{
-				"(?i)(^\s*\<title\>).*(\<\/title\>)" = "`${1}$($Latest.Title)`${2}"
-				"(?i)(^\s*\<summary\>).*(\<\/summary\>)" = "`${1}$($Latest.summary)`${2}"
+				"(?i)(^\s*\<title\>).*(\<\/title\>)"           = "`${1}$($Latest.Title)`${2}"
+				"(?i)(^\s*\<summary\>).*(\<\/summary\>)"       = "`${1}$($Latest.summary)`${2}"
 				"(?i)(^\s*\<licenseUrl\>).*(\<\/licenseUrl\>)" = "`${1}$($Latest.LicenseUrl)`${2}"
 			}
 		}
 	} else {
 		@{
 			".\tools\chocolateyinstall.ps1" = @{
-				"(?i)(^\s*PackageName\s*=\s*)('.*')" = "`$1'$($Latest.PackageName)'"
-				"(?i)(^\s*url\s*=\s*)('.*')" = "`$1'$($Latest.URL32)'"
-				"(?i)(^\s*url64bit\s*=\s*)('.*')"	= "`$1'$($Latest.URL64)'"
-				"(?i)(^\s*Checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
-				"(?i)(^\s*ChecksumType\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType32)'"
-				"(?i)(^\s*Checksum64\s*=\s*)('.*')" = "`$1'$($Latest.Checksum64)'"
-				"(?i)(^\s*ChecksumType64\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType64)'"
+				"(?i)(^\s*PackageName\s*=\s*)('.*')"           = "`$1'$($Latest.PackageName)'"
+				"(?i)(^\s*fileType\s*=\s*)('.*')"              = "`$1'$($Latest.fileType)'"
+				"(?i)(^\s*url\s*=\s*)('.*')"                   = "`$1'$($Latest.URL32)'"
+				"(?i)(^\s*url64bit\s*=\s*)('.*')"              = "`$1'$($Latest.URL64)'"
+				"(?i)(^\s*Checksum\s*=\s*)('.*')"              = "`$1'$($Latest.Checksum32)'"
+				"(?i)(^\s*ChecksumType\s*=\s*)('.*')"          = "`$1'$($Latest.ChecksumType32)'"
+				"(?i)(^\s*Checksum64\s*=\s*)('.*')"            = "`$1'$($Latest.Checksum64)'"
+				"(?i)(^\s*ChecksumType64\s*=\s*)('.*')"        = "`$1'$($Latest.ChecksumType64)'"
 			}
 			".\adoptopenjdk.nuspec" = @{
-				"(?i)(^\s*\<title\>).*(\<\/title\>)" = "`${1}$($Latest.Title)`${2}"
-				"(?i)(^\s*\<summary\>).*(\<\/summary\>)" = "`${1}$($Latest.summary)`${2}"
+				"(?i)(^\s*\<title\>).*(\<\/title\>)"           = "`${1}$($Latest.Title)`${2}"
+				"(?i)(^\s*\<summary\>).*(\<\/summary\>)"       = "`${1}$($Latest.summary)`${2}"
 				"(?i)(^\s*\<licenseUrl\>).*(\<\/licenseUrl\>)" = "`${1}$($Latest.LicenseUrl)`${2}"
 			}
 		}
@@ -76,8 +78,9 @@ param(
 [string]$project = "jdk",
 [ValidateSet("large", "normal")]
 [string]$heap_size = "normal",
-[string]$dev_name, # orginal package name
-[switch]$ext # optional switch
+[string]$dev_name,     # orginal package name
+[switch]$ext,          # optional switch for extensions
+[switch]$fixedversion  # optional switch for fixedversion
 )
 $me = ( $MyInvocation.MyCommand );
 # Depending on the $arch used above determines which string is used in the call to the server
@@ -118,13 +121,18 @@ $JavaVM = @{$true = "${type}${number}"; $false = "${type}${number}-${jvm}" }[ ( 
 $PackageName = @{$true = "AdoptOpenJDK-${JavaVM}"; $false = "${dev_name}" }[ ( $dev_name -eq "" ) ]
 if ($url32 -match "${number}U") { $url32 = $url32 } else { $url32 = $null }
 Write-Verbose "$me url32 -$url32- url64 -$url64-"
+if ($fixedVersion) {
+  $packageVersion =  $beta
+} else {
+  $packageVersion = Get-FixVersion $beta
+}
 
 	@{
         Title           = "AdoptOpenJDK ${type}${number} ${jvm} ${version}"
         PackageName     = $PackageName
         URL32           = $url32
         URL64           = $url64
-        Version         = $beta
+        Version         = $packageVersion
         LicenseUrl      = "https://github.com/AdoptOpenJDK/openjdk-jdk${number}u/blob/master/LICENSE"
         SemVer          = $vest
         fileType        = $fileType
