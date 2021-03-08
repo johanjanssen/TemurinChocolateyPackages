@@ -15,8 +15,8 @@
 | FeatureJarFileRunWith  &nbsp; | &nbsp; Associate .jar files with Java applications (DEFAULT) |
 | FeatureJavaHome	     &nbsp; | &nbsp; Update the JAVA_HOME environment variable |
 | FeatureIcedTeaWeb      &nbsp; | &nbsp; Install IcedTea-Web |
-| FeatureJNLPFileRunWith &nbsp; | &nbsp; Associate .jnlp files with IcedTea-web |
-| FeatureOracleJavaSoft	 &nbsp; | &nbsp; Updates registry keys HKLM\SOFTWARE\JavaSoft\ |
+| FeatureJNLPFileRunWith &nbsp; | &nbsp; Associate .jnlp files with IcedTea-web (AdoptOpenJDK 8 only) |
+| FeatureOracleJavaSoft	 &nbsp; | &nbsp; Updates registry keys HKLM\SOFTWARE\JavaSoft\ (AdoptOpenJDK 8 only) |
 
 ** Note: FeatureOracleJavaSoft can be used to prevent Oracle Java launching from PATH when AdoptOpenJDK is uninstalled. Reinstall Oracle Java if you need to restore the Oracle registry keys. **
 
