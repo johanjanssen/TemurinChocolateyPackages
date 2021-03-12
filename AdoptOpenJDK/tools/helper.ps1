@@ -50,6 +50,9 @@ $toolsDir = @{$true="${env:ProgramFiles}\AdoptOpenJDK";$false="${env:programfile
           "FeatureJNLPFileRunWith" {
             $pp_addlocal_array += -join ("FeatureJNLPFileRunWith", ",")
           }
+          "FeatureOracleJavaSoft" {
+            $pp_addlocal_array += -join ("FeatureOracleJavaSoft", ",")
+          }          
         }
       }
       Write-Warning "No InstallLevel detected. Defaulting to AddLocal"
