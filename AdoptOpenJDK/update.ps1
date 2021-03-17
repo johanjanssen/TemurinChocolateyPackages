@@ -119,7 +119,7 @@ $build = @{$true = "nightly"; $false = "" }[ ( $release -eq "ea" ) ]
 $beta = @{$true = "${version}"; $false = "${version}-${build}" }[ ( $release -eq "ga" ) ]
 $JavaVM = @{$true = "${type}${number}"; $false = "${type}${number}-${jvm}" }[ ( $jvm -match "hotspot" ) ]
 $PackageName = @{$true = "AdoptOpenJDK-${JavaVM}"; $false = "${dev_name}" }[ ( $dev_name -eq "" ) ]
-if ($url32 -match "${number}U") { $url32 = $url32 } else { $url32 = $null }
+if ($url32 -match "${number}") { $url32 = $url32 } else { $url32 = $null }
 Write-Verbose "$me url32 -$url32- url64 -$url64-"
 if ($fixedVersion) {
   $packageVersion =  $beta
