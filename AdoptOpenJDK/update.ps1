@@ -141,7 +141,7 @@ if ($fixedVersion) {
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11", "14", "15"); $types = @("jre", "jdk")
+$numbers = @("8", "11", "14", "15", "16"); $types = @("jre", "jdk")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot", "openj9"); $builds = @("ga"); $os = "windows"
 
