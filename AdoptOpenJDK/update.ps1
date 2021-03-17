@@ -133,7 +133,7 @@ if ($fixedVersion) {
         URL32           = $url32
         URL64           = $url64
         Version         = $packageVersion
-        LicenseUrl      = "https://github.com/AdoptOpenJDK/openjdk-jdk${number}u/blob/master/LICENSE"
+        LicenseUrl      = "https://github.com/AdoptOpenJDK/openjdk-jdk${number}/blob/master/LICENSE"
         SemVer          = $vest
         fileType        = $fileType
 	}
