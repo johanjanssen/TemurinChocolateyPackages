@@ -59,7 +59,7 @@ function Get-OpenSourceJDK {
 [CmdletBinding()]
 param(
 [parameter(Mandatory=$true)]
-[ValidateSet("8","9","10","11","12","13","14","15","16")]
+[ValidateSet("8","11","16")]
 [string]$number = "8",
 [parameter(Mandatory=$true)]
 [ValidateSet("ea", "ga")]
@@ -119,7 +119,7 @@ $build = @{$true = "nightly"; $false = "" }[ ( $release -eq "ea" ) ]
 $beta = @{$true = "${version}"; $false = "${version}-${build}" }[ ( $release -eq "ga" ) ]
 $JavaVM = @{$true = "${type}${number}"; $false = "${type}${number}-${jvm}" }[ ( $jvm -match "hotspot" ) ]
 $PackageName = @{$true = "AdoptOpenJDK-${JavaVM}"; $false = "${dev_name}" }[ ( $dev_name -eq "" ) ]
-if ($url32 -match "${number}") { $url32 = $url32 } else { $url32 = $null }
+if ($url32 -match "${number}" -or $url32 -match "${number}U") { $url32 = $url32 } else { $url32 = $null } # From Java 16 the U in the version was removed
 Write-Verbose "$me url32 -$url32- url64 -$url64-"
 if ($fixedVersion) {
   $packageVersion =  $beta
@@ -141,7 +141,7 @@ if ($fixedVersion) {
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11", "14", "15", "16"); $types = @("jre", "jdk")
+$numbers = @("8", "11", "16"); $types = @("jre", "jdk")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot", "openj9"); $builds = @("ga"); $os = "windows"
 
