@@ -127,13 +127,17 @@ if ($fixedVersion) {
   $packageVersion = Get-FixVersion $beta
 }
 
+# Starting with Java 16, the u after the version was removed
+$versionPostFix = ""
+if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
+
 	@{
         Title           = "AdoptOpenJDK ${type}${number} ${jvm} ${version}"
         PackageName     = $PackageName
         URL32           = $url32
         URL64           = $url64
         Version         = $packageVersion
-        LicenseUrl      = "https://github.com/AdoptOpenJDK/openjdk-jdk${number}/blob/master/LICENSE"
+        LicenseUrl      = "https://github.com/AdoptOpenJDK/openjdk-jdk${number}$versionPostFix/blob/master/LICENSE"
         SemVer          = $vest
         fileType        = $fileType
 	}
@@ -141,7 +145,7 @@ if ($fixedVersion) {
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11", "16"); $types = @("jre", "jdk")
+$numbers = @("8", "11"); $types = @("jre", "jdk")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot", "openj9"); $builds = @("ga"); $os = "windows"
 
