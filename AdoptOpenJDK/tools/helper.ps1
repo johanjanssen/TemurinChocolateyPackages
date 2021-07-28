@@ -15,7 +15,7 @@ param(
     [hashtable]$pp
 )
 $New_pp = @{}; 
-$toolsDir = @{$true="${env:ProgramFiles}\AdoptOpenJDK";$false="${env:programfiles(x86)}\AdoptOpenJDK"}[ ((Get-OSArchitectureWidth 64) -or ($env:chocolateyForceX86 -eq $true)) ]
+$toolsDir = @{$true="${env:ProgramFiles}\Temurin";$false="${env:programfiles(x86)}\Temurin"}[ ((Get-OSArchitectureWidth 64) -or ($env:chocolateyForceX86 -eq $true)) ]
     if (![string]::IsNullOrEmpty($pp.transforms)) {
       $New_pp.add( "transforms", $pp.transforms )
     }

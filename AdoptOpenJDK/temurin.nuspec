@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+		<id></id>
+		<version>0.0.0</version>
+		<packageSourceUrl>https://github.com/johanjanssen/TemurinChocolateyPackages</packageSourceUrl>
+		<title></title>
+		<authors>Adoptium</authors>
+		<owners>JohanJanssen</owners>
+		<licenseUrl></licenseUrl>
+		<projectUrl>https://adoptium.net/</projectUrl>
+		<tags>openjdk java jvm</tags>
+		<summary>Adoptium provides prebuilt OpenJDK build binaries. This one uses OpenJDK_HotSpot.</summary>
+		<description></description>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

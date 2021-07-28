@@ -13,9 +13,9 @@ function global:au_BeforeUpdate {
     cp "$PSScriptRoot\install32.ps1" "$PSScriptRoot\tools\chocolateyinstall.ps1" -Force
   }
 	$jvm = @{$true="Eclipse_OpenJ9";$false="OpenJDK_HotSpot"}[ ( $Latest.PackageName -match "openj9" )]
-	Set-ReadMeFile -keys "fileType,Vendor,JVM_Type,PackageName" -new_info "$($Latest.fileType),AdoptOpenJDK,$jvm,$($Latest.PackageName)"
+	Set-ReadMeFile -keys "fileType,Vendor,JVM_Type,PackageName" -new_info "$($Latest.fileType),Temurin,$jvm,$($Latest.PackageName)"
 	# Adding summary to the Latest Hashtable
-	$Latest.summary	= "AdoptOpenJDK provides prebuilt OpenJDK build binaries. This one uses $jvm."
+	$Latest.summary	= "Adoptium provides prebuilt OpenJDK build binaries. This one uses $jvm."
 }
 
 function global:au_SearchReplace {
@@ -28,7 +28,7 @@ function global:au_SearchReplace {
 				"(?i)(^\s*Checksum64\s*=\s*)('.*')"            = "`$1'$($Latest.Checksum64)'"
 				"(?i)(^\s*ChecksumType64\s*=\s*)('.*')"        = "`$1'$($Latest.ChecksumType64)'"
 			}
-			".\adoptopenjdk.nuspec" = @{
+			".\temurin.nuspec" = @{
 				"(?i)(^\s*\<title\>).*(\<\/title\>)"           = "`${1}$($Latest.Title)`${2}"
 				"(?i)(^\s*\<summary\>).*(\<\/summary\>)"       = "`${1}$($Latest.summary)`${2}"
 				"(?i)(^\s*\<licenseUrl\>).*(\<\/licenseUrl\>)" = "`${1}$($Latest.LicenseUrl)`${2}"
@@ -46,7 +46,7 @@ function global:au_SearchReplace {
 				"(?i)(^\s*Checksum64\s*=\s*)('.*')"            = "`$1'$($Latest.Checksum64)'"
 				"(?i)(^\s*ChecksumType64\s*=\s*)('.*')"        = "`$1'$($Latest.ChecksumType64)'"
 			}
-			".\adoptopenjdk.nuspec" = @{
+			".\temurin.nuspec" = @{
 				"(?i)(^\s*\<title\>).*(\<\/title\>)"           = "`${1}$($Latest.Title)`${2}"
 				"(?i)(^\s*\<summary\>).*(\<\/summary\>)"       = "`${1}$($Latest.summary)`${2}"
 				"(?i)(^\s*\<licenseUrl\>).*(\<\/licenseUrl\>)" = "`${1}$($Latest.LicenseUrl)`${2}"
@@ -72,8 +72,8 @@ param(
 [string]$type = "jre",
 [ValidateSet("hotspot", "openj9")]
 [string]$jvm = "hotspot", 
-[ValidateSet("adoptopenjdk", "openjdk")]
-[string]$vendor = "adoptopenjdk",
+[ValidateSet("temurin", "openjdk")]
+[string]$vendor = "temurin",
 [ValidateSet("jdk", "valhalla", "metropolis", "jfr")]
 [string]$project = "jdk",
 [ValidateSet("large", "normal")]
@@ -85,9 +85,9 @@ param(
 $me = ( $MyInvocation.MyCommand );
 # Depending on the $arch used above determines which string is used in the call to the server
 if ($arch) {
-$openJDKapi = "https://api.adoptopenjdk.net/v3/assets/feature_releases/${number}/${release}?architecture=${arch}&heap_size=${heap_size}&image_type=${type}&jvm_impl=${jvm}&os=${OS}&page=0&page_size=1&project=${project}&sort_order=DESC&vendor=${vendor}"
+$openJDKapi = "https://api.adoptium.net/v3/assets/feature_releases/${number}/${release}?architecture=${arch}&heap_size=${heap_size}&image_type=${type}&jvm_impl=${jvm}&os=${OS}&page=0&page_size=1&project=${project}&sort_order=DESC&vendor=${vendor}"
 } else {
-$openJDKapi = "https://api.adoptopenjdk.net/v3/assets/feature_releases/${number}/${release}?heap_size=${heap_size}&image_type=${type}&jvm_impl=${jvm}&os=${OS}&page=0&page_size=1&project=${project}&vendor=${vendor}"
+$openJDKapi = "https://api.adoptium.net/v3/assets/feature_releases/${number}/${release}?heap_size=${heap_size}&image_type=${type}&jvm_impl=${jvm}&os=${OS}&page=0&page_size=1&project=${project}&vendor=${vendor}"
 }
 Write-Verbose "$me openJDKapi -$openJDKapi-"
 $t = try { (Invoke-WebRequest -Uri $openJDKapi -ErrorAction Stop -UseBasicParsing).BaseResponse }
@@ -118,7 +118,7 @@ if ($version.BuildMetadata) { $version = -join( $version.Version, ".", $version.
 $build = @{$true = "nightly"; $false = "" }[ ( $release -eq "ea" ) ]
 $beta = @{$true = "${version}"; $false = "${version}-${build}" }[ ( $release -eq "ga" ) ]
 $JavaVM = @{$true = "${type}${number}"; $false = "${type}${number}-${jvm}" }[ ( $jvm -match "hotspot" ) ]
-$PackageName = @{$true = "AdoptOpenJDK-${JavaVM}"; $false = "${dev_name}" }[ ( $dev_name -eq "" ) ]
+$PackageName = @{$true = "Temurin-${JavaVM}"; $false = "${dev_name}" }[ ( $dev_name -eq "" ) ]
 if ($url32 -match "${number}" -or $url32 -match "${number}U") { $url32 = $url32 } else { $url32 = $null } # From Java 16 the U in the version was removed
 Write-Verbose "$me url32 -$url32- url64 -$url64-"
 if ($fixedVersion) {
@@ -132,12 +132,12 @@ $versionPostFix = ""
 if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
 
 	@{
-        Title           = "AdoptOpenJDK ${type}${number} ${jvm} ${version}"
+        Title           = "Temurin ${type}${number} ${jvm} ${version}"
         PackageName     = $PackageName
         URL32           = $url32
         URL64           = $url64
         Version         = $packageVersion
-        LicenseUrl      = "https://github.com/AdoptOpenJDK/openjdk-jdk${number}$versionPostFix/blob/master/LICENSE"
+        LicenseUrl      = "https://github.com/Temurin/openjdk-jdk${number}$versionPostFix/blob/master/LICENSE"
         SemVer          = $vest
         fileType        = $fileType
 	}
@@ -145,7 +145,7 @@ if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11"); $types = @("jre", "jdk")
+$numbers = @("8", "11", "16"); $types = @("jre", "jdk")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot", "openj9"); $builds = @("ga"); $os = "windows"
 
@@ -156,7 +156,7 @@ foreach ( $number in $numbers ) {
 			foreach ( $build in $builds ) {        
 				# Create a package without the version for the latest release
 				if ( $number -eq $numbers[-1] ) { 
-					$name = "AdoptOpenJDK"
+					$name = "Temurin"
 					if ($jvm -eq "openj9") {
 						$name = $name + $jvm
 					}
@@ -166,7 +166,7 @@ foreach ( $number in $numbers ) {
 					$streams.Add( "$($type)$($number)_$($jvm)_$($build)_Latest" , ( Get-OpenSourceJDK -number $number -type $type -jvm $jvm -OS $os -release $build -dev_name $name -ext ) )
 				} 
 
-				$name = "AdoptOpenJDK$number"
+				$name = "Temurin$number"
 				if ($jvm -eq "openj9") {
 					$name = $name + $jvm
 				}

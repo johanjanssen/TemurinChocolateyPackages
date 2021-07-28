@@ -1,6 +1,6 @@
-# [<img src=".\AdoptOpenJDK.png" width="48" height="48"/> <PackageName> ](https://chocolatey.org/packages/<PackageName> )
+# [<PackageName> ](https://chocolatey.org/packages/<PackageName> )
 
- ## AdoptOpenJDK
+ ## Temurin
  
  The <PackageName> package uses <JVM_Type> VM from <Vendor> using the <fileType> file format.
  
@@ -10,15 +10,15 @@
  
 | Feature | Description |
 |----|----|
-| FeatureMain	         &nbsp; | &nbsp; Core AdoptOpenJDK installation (DEFAULT) |
+| FeatureMain	         &nbsp; | &nbsp; Core Temurin installation (DEFAULT) |
 | FeatureEnvironment     &nbsp; | &nbsp; Update the PATH environment variable (DEFAULT) |
 | FeatureJarFileRunWith  &nbsp; | &nbsp; Associate .jar files with Java applications (DEFAULT) |
 | FeatureJavaHome	     &nbsp; | &nbsp; Update the JAVA_HOME environment variable |
 | FeatureIcedTeaWeb      &nbsp; | &nbsp; Install IcedTea-Web |
-| FeatureJNLPFileRunWith &nbsp; | &nbsp; Associate .jnlp files with IcedTea-web (AdoptOpenJDK 8 only) |
-| FeatureOracleJavaSoft	 &nbsp; | &nbsp; Updates registry keys HKLM\SOFTWARE\JavaSoft\ (AdoptOpenJDK 8 only) |
+| FeatureJNLPFileRunWith &nbsp; | &nbsp; Associate .jnlp files with IcedTea-web (Temurin 8 only) |
+| FeatureOracleJavaSoft	 &nbsp; | &nbsp; Updates registry keys HKLM\SOFTWARE\JavaSoft\ (Temurin 8 only) |
 
-** Note: FeatureOracleJavaSoft can be used to prevent Oracle Java launching from PATH when AdoptOpenJDK is uninstalled. Reinstall Oracle Java if you need to restore the Oracle registry keys. **
+** Note: FeatureOracleJavaSoft can be used to prevent Oracle Java launching from PATH when Temurin is uninstalled. Reinstall Oracle Java if you need to restore the Oracle registry keys. **
 
 Optional parameters can be used that group some of the features together:
 
@@ -30,9 +30,9 @@ Optional parameters can be used that group some of the features together:
 |----|----|
 | &nbsp; INSTALLLEVEL=3 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith, FeatureJavaHome,FeatureIcedTeaWeb,FeatureJNLPFileRunWith &nbsp; |
 
-The following example silently installs AdoptOpenJDK, updates the PATH, associates .jar files with Java applications and defines JAVA_HOME:
-Example: `choco install <PackageName> --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=C:\Program Files\AdoptOpenJDK\ /quiet"`
-** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `%Programfiles%\AdoptOpenJDK` **
+The following example silently installs Temurin, updates the PATH, associates .jar files with Java applications and defines JAVA_HOME:
+Example: `choco install <PackageName> --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=C:\Program Files\Temurin\ /quiet"`
+** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `%Programfiles%\Temurin` **
 
 This will install both the 32 bit and 64 bit versions of the desired package by using the parameter `/both`
 Example: `choco install <PackageName> --params="/both"`
