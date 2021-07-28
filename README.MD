@@ -1,5 +1,5 @@
 # Chocolatey packages
-This repo contains the source for the AdoptOpenJDK Chocolatey packages
+This repo contains the source for the Temurin Chocolatey packages
 
 # Changing the packages
 * Install AU

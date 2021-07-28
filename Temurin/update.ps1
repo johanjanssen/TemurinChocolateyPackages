@@ -72,8 +72,8 @@ param(
 [string]$type = "jre",
 [ValidateSet("hotspot", "openj9")]
 [string]$jvm = "hotspot", 
-[ValidateSet("temurin", "openjdk")]
-[string]$vendor = "temurin",
+[ValidateSet("adoptium", "openjdk")]
+[string]$vendor = "adoptium",
 [ValidateSet("jdk", "valhalla", "metropolis", "jfr")]
 [string]$project = "jdk",
 [ValidateSet("large", "normal")]
@@ -137,7 +137,7 @@ if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
         URL32           = $url32
         URL64           = $url64
         Version         = $packageVersion
-        LicenseUrl      = "https://github.com/Temurin/openjdk-jdk${number}$versionPostFix/blob/master/LICENSE"
+        LicenseUrl      = "https://github.com/adoptium/openjdk-jdk${number}$versionPostFix/blob/master/LICENSE"
         SemVer          = $vest
         fileType        = $fileType
 	}
@@ -147,7 +147,7 @@ function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
 $numbers = @("8", "11", "16"); $types = @("jre", "jdk")
 # Optionally add "nightly" to $builds
-$jvms = @("hotspot", "openj9"); $builds = @("ga"); $os = "windows"
+$jvms = @("hotspot"); $builds = @("ga"); $os = "windows"
 
 $streams = [ordered] @{ }
 foreach ( $number in $numbers ) {
