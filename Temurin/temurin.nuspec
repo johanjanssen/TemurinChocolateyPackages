@@ -1,17 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-		<id></id>
-		<version>0.0.0</version>
+		<id>Temurin8</id>
+		<version>8.302.8</version>
 		<packageSourceUrl>https://github.com/johanjanssen/TemurinChocolateyPackages</packageSourceUrl>
-		<title></title>
+		<title>Temurin jdk8 hotspot 8.302.8</title>
 		<authors>Adoptium</authors>
 		<owners>JohanJanssen</owners>
-		<licenseUrl></licenseUrl>
+		<licenseUrl>https://github.com/adoptium/openjdk-jdk8u/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://adoptium.net/</projectUrl>
 		<tags>openjdk java jvm</tags>
 		<summary>Adoptium provides prebuilt OpenJDK build binaries. This one uses OpenJDK_HotSpot.</summary>
-		<description></description>
+		<description><![CDATA[ ## Temurin
+ 
+ The Temurin8 package uses OpenJDK_HotSpot VM from Temurin using the msi file format.
+ 
+ Using a msi file provides a rich source of installation options :
+ 
+ ** The following Features must be listed after `/ADDLOCAL=` using a comma after each feature. **
+ 
+| Feature | Description |
+|----|----|
+| FeatureMain	         &nbsp; | &nbsp; Core Temurin installation (DEFAULT) |
+| FeatureEnvironment     &nbsp; | &nbsp; Update the PATH environment variable (DEFAULT) |
+| FeatureJarFileRunWith  &nbsp; | &nbsp; Associate .jar files with Java applications (DEFAULT) |
+| FeatureJavaHome	     &nbsp; | &nbsp; Update the JAVA_HOME environment variable |
+| FeatureIcedTeaWeb      &nbsp; | &nbsp; Install IcedTea-Web |
+| FeatureJNLPFileRunWith &nbsp; | &nbsp; Associate .jnlp files with IcedTea-web (Temurin 8 only) |
+| FeatureOracleJavaSoft	 &nbsp; | &nbsp; Updates registry keys HKLM\SOFTWARE\JavaSoft\ (Temurin 8 only) |
+
+** Note: FeatureOracleJavaSoft can be used to prevent Oracle Java launching from PATH when Temurin is uninstalled. Reinstall Oracle Java if you need to restore the Oracle registry keys. **
+
+Optional parameters can be used that group some of the features together:
+
+| Parameter | Features |
+|----|----|
+| &nbsp; INSTALLLEVEL=1 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith &nbsp; |
+|----|----|
+| &nbsp; INSTALLLEVEL=2 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith, FeatureJavaHome,FeatureIcedTeaWeb &nbsp; |
+|----|----|
+| &nbsp; INSTALLLEVEL=3 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith, FeatureJavaHome,FeatureIcedTeaWeb,FeatureJNLPFileRunWith &nbsp; |
+
+The following example silently installs Temurin, updates the PATH, associates .jar files with Java applications and defines JAVA_HOME:
+Example: `choco install Temurin8 --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=C:\Program Files\Temurin\ /quiet"`
+** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `%Programfiles%\Temurin` **
+
+This will install both the 32 bit and 64 bit versions of the desired package by using the parameter `/both`
+Example: `choco install Temurin8 --params="/both"`
+]]></description>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

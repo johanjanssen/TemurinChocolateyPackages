@@ -69,7 +69,7 @@ param(
 [ValidateSet("aix", "linux", "mac", "solaris", "windows")]
 [string]$OS = "windows",
 [ValidateSet("jdk", "jre", "testimage")]
-[string]$type = "jre",
+[string]$type = "jdk",
 [ValidateSet("hotspot", "openj9")]
 [string]$jvm = "hotspot", 
 [ValidateSet("adoptium", "openjdk")]
@@ -145,7 +145,7 @@ if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11", "16"); $types = @("jre", "jdk")
+$numbers = @("8","16"); $types = @("jdk")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot"); $builds = @("ga"); $os = "windows"
 
