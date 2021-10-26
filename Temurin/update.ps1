@@ -59,7 +59,7 @@ function Get-OpenSourceJDK {
 [CmdletBinding()]
 param(
 [parameter(Mandatory=$true)]
-[ValidateSet("8","11","16")]
+[ValidateSet("8","11","16","17")]
 [string]$number = "8",
 [parameter(Mandatory=$true)]
 [ValidateSet("ea", "ga")]
@@ -127,9 +127,9 @@ if ($fixedVersion) {
   $packageVersion = Get-FixVersion $beta
 }
 
-# Starting with Java 16, the u after the version was removed
-$versionPostFix = ""
-if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
+# Starting with Java 16, the u after the version was removed update 26-10-2021 with Adoptium the 'u' seems to be added again
+#$versionPostFix = ""
+#if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
 
 	@{
         Title           = "Temurin ${type}${number} ${jvm} ${version}"
@@ -137,7 +137,7 @@ if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
         URL32           = $url32
         URL64           = $url64
         Version         = $packageVersion
-        LicenseUrl      = "https://github.com/adoptium/openjdk-jdk${number}$versionPostFix/blob/master/LICENSE"
+        LicenseUrl      = "https://github.com/adoptium/jdk${number}u/blob/master/LICENSE"
         SemVer          = $vest
         fileType        = $fileType
 	}
@@ -145,7 +145,7 @@ if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8","16"); $types = @("jdk")
+$numbers = @("8", "11", "17"); $types = @("jdk")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot"); $builds = @("ga"); $os = "windows"
 
