@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-		<id>Temurin8</id>
-		<version>8.302.8</version>
+		<id>Temurin11</id>
+		<version>11.0.13.800</version>
 		<packageSourceUrl>https://github.com/johanjanssen/TemurinChocolateyPackages</packageSourceUrl>
-		<title>Temurin jdk8 hotspot 8.302.8</title>
+		<title>Temurin jdk11 hotspot 11.0.13.8</title>
 		<authors>Adoptium</authors>
 		<owners>JohanJanssen</owners>
-		<licenseUrl>https://github.com/adoptium/jdk8u/blob/master/LICENSE</licenseUrl>
+		<licenseUrl>https://github.com/adoptium/jdk11u/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://adoptium.net/</projectUrl>
 		<iconUrl>https://adoptium.net/dist/assets/temurin-logo-square.png</iconUrl>
 		<tags>openjdk java jvm</tags>
 		<summary>Adoptium provides prebuilt OpenJDK build binaries. This one uses OpenJDK_HotSpot.</summary>
 		<description><![CDATA[ ## Temurin
  
- The Temurin8 package uses OpenJDK_HotSpot VM from Temurin using the msi file format.
+ The Temurin11 package uses OpenJDK_HotSpot VM from Temurin using the msi file format.
  
  Using a msi file provides a rich source of installation options :
  
@@ -43,11 +43,11 @@ Optional parameters can be used that group some of the features together:
 | &nbsp; INSTALLLEVEL=3 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith, FeatureJavaHome,FeatureIcedTeaWeb,FeatureJNLPFileRunWith &nbsp; |
 
 The following example silently installs Temurin, updates the PATH, associates .jar files with Java applications and defines JAVA_HOME:
-Example: `choco install Temurin8 --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=C:\Program Files\Temurin\ /quiet"`
-** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `%Programfiles%\Temurin` **
+Example: `choco install Temurin11 --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=C:\Program Files\Eclipse Adoptium\ /quiet"`
+** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `%Programfiles%\Eclipse Adoptium` **
 
 This will install both the 32 bit and 64 bit versions of the desired package by using the parameter `/both`
-Example: `choco install Temurin8 --params="/both"`
+Example: `choco install Temurin11 --params="/both"`
 ]]></description>
   </metadata>
   <files>

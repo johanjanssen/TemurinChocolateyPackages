@@ -1,3 +1,4 @@
 *.nupkg
 Temurin.json
+README.MD
 tools/chocolateyinstall.ps1
