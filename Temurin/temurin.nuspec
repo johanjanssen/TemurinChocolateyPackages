@@ -7,8 +7,9 @@
 		<title>Temurin jdk8 hotspot 8.302.8</title>
 		<authors>Adoptium</authors>
 		<owners>JohanJanssen</owners>
-		<licenseUrl>https://github.com/adoptium/openjdk-jdk8u/blob/master/LICENSE</licenseUrl>
+		<licenseUrl>https://github.com/adoptium/jdk8u/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://adoptium.net/</projectUrl>
+		<iconUrl>https://adoptium.net/dist/assets/temurin-logo-square.png</iconUrl>
 		<tags>openjdk java jvm</tags>
 		<summary>Adoptium provides prebuilt OpenJDK build binaries. This one uses OpenJDK_HotSpot.</summary>
 		<description><![CDATA[ ## Temurin
