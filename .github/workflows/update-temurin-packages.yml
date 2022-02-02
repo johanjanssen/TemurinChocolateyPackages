@@ -6,6 +6,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+      - name: Install au
+        run: Install-Module au
       - name: Run update script
         run: ls; cd .\Temurin\; .\update.ps1; ls
         shell: powershell
