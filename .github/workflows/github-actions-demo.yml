@@ -1,0 +1,17 @@
+name: GitHub Actions Demo
+on: workflow_dispatch
+jobs:
+  Update-Temurin-Packages:
+    runs-on: windows-latest
+    steps:
+      - name: Run update script
+        run: cd .\Temurin\; .\update.ps1; ls
+        shell: powershell
+  Push-Temurin-Packages:
+    runs-on: windows-latest
+    environment: 'Push-Packages'
+    needs: Update-Temurin-Packages
+    steps:
+      - name: Run update script
+        run: cd .\Temurin\; .\pushpackages.ps1
+        shell: powershell

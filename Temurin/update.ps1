@@ -59,7 +59,7 @@ function Get-OpenSourceJDK {
 [CmdletBinding()]
 param(
 [parameter(Mandatory=$true)]
-[ValidateSet("8","11","16","17")]
+[ValidateSet("8","11","17")]
 [string]$number = "8",
 [parameter(Mandatory=$true)]
 [ValidateSet("ea", "ga")]
@@ -145,7 +145,8 @@ if ($fixedVersion) {
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11"); $types = @("jdk")
+#$numbers = @("8", "11", "17"); $types = @("jdk","jre")
+$numbers = @("11"); $types = @("jre")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot"); $builds = @("ga"); $os = "windows"
 
@@ -181,4 +182,4 @@ foreach ( $number in $numbers ) {
 return @{ Streams = $streams } 
 }
 # Optionally add '-NoCheckChocoVersion' below to create packages for versions that already exist on the Chocolatey server.
-update -ChecksumFor none -NoCheckUrl -NoCheckChocoVersion
+update -ChecksumFor none -NoCheckUrl
