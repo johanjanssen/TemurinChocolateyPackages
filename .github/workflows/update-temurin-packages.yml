@@ -9,7 +9,7 @@ jobs:
       - name: Install au
         run: Set-Service wuauserv -StartupType Manual; choco install -y au wormies-au-helpers
       - name: Run update script
-        run: ls; cd .\Temurin\; .\update.ps1; ls
+        run: cd .\Temurin\; .\update.ps1; ls *.nupkg
         shell: powershell
       - uses: actions/upload-artifact@master
         with:
@@ -25,6 +25,6 @@ jobs:
           name: nupkg-files
           path: Temurin/*.nupkg
       - name: Run update script
-        run: cd .\Temurin\; Get-ChildItem -Filter *.nupkg | Foreach-Object { 	choco push $_ --source https://push.chocolatey.org/}
+        run: cd .\Temurin\; ls *.nupkg; Get-ChildItem -Filter *.nupkg | Foreach-Object { 	choco push $_ --source https://push.chocolatey.org/}
         shell: powershell
 
