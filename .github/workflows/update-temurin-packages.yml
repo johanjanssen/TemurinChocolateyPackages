@@ -27,7 +27,7 @@ jobs:
         env:
           CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
         run: choco apikey --key "$env:CHOCOLATEY_API_KEY" --source https://push.chocolatey.org/ CHOCOLATEY_API_KEY
-      - name: Run update script
+      - name: Push packages
         #run: ls *.nupkg; Get-ChildItem -Filter *.nupkg | Foreach-Object { 	choco push $_ --source https://push.chocolatey.org/}
         run: choco push Temurin11jre.11.0.14.900.nupkg --source https://push.chocolatey.org/
         shell: powershell
