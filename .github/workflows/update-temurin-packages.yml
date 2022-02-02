@@ -11,11 +11,20 @@ jobs:
       - name: Run update script
         run: ls; cd .\Temurin\; .\update.ps1; ls
         shell: powershell
+      - uses: actions/upload-artifact@master
+        with:
+          name: nupkg-files
+          path: Temurin/*.nupkg
   Push-Temurin-Packages:
     runs-on: windows-latest
     environment: 'Push-Packages'
     needs: Update-Temurin-Packages
     steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: nupkg-files
+          path: Temurin/*.nupkg
       - name: Run update script
-        run: cd .\Temurin\; .\pushpackages.ps1
+        run: cd .\Temurin\; Get-ChildItem -Filter *.nupkg | Foreach-Object { 	choco push $_ --source https://push.chocolatey.org/}
         shell: powershell
+
