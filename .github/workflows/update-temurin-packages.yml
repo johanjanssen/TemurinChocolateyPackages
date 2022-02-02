@@ -23,8 +23,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: nupkg-files
-          path: Temurin/*.nupkg
       - name: Run update script
-        run: cd .\Temurin\; ls *.nupkg; Get-ChildItem -Filter *.nupkg | Foreach-Object { 	choco push $_ --source https://push.chocolatey.org/}
+        run: ls *.nupkg; Get-ChildItem -Filter *.nupkg | Foreach-Object { 	choco push $_ --source https://push.chocolatey.org/}
         shell: powershell
 
