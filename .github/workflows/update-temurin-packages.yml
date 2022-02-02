@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Update Temurin Packages
 on: workflow_dispatch
 jobs:
   Update-Temurin-Packages:
