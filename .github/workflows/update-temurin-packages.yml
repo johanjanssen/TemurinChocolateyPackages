@@ -4,8 +4,10 @@ jobs:
   Update-Temurin-Packages:
     runs-on: windows-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
       - name: Run update script
-        run: cd .\Temurin\; .\update.ps1; ls
+        run: ls; cd .\Temurin\; .\update.ps1; ls
         shell: powershell
   Push-Temurin-Packages:
     runs-on: windows-latest
