@@ -181,4 +181,4 @@ foreach ( $number in $numbers ) {
 return @{ Streams = $streams } 
 }
 # Optionally add '-NoCheckChocoVersion' below to create packages for versions that already exist on the Chocolatey server.
-update -ChecksumFor none -NoCheckUrl
+update -ChecksumFor none -NoCheckUrl -NoCheckChocoVersion
