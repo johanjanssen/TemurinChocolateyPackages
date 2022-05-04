@@ -2,3 +2,4 @@
 Temurin.json
 README.MD
 tools/chocolateyinstall.ps1
+.idea/

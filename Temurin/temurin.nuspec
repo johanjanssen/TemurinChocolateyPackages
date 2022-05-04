@@ -43,8 +43,8 @@ Optional parameters can be used that group some of the features together:
 | &nbsp; INSTALLLEVEL=3 &nbsp; | &nbsp; FeatureMain,FeatureEnvironment,FeatureJarFileRunWith, FeatureJavaHome,FeatureIcedTeaWeb,FeatureJNLPFileRunWith &nbsp; |
 
 The following example silently installs Temurin, updates the PATH, associates .jar files with Java applications and defines JAVA_HOME:
-Example: `choco install Temurin11 --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=C:\Program Files\Eclipse Adoptium\ /quiet"`
-** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `%Programfiles%\Eclipse Adoptium` **
+Example: `choco install Temurin11 --params="/ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome /INSTALLDIR=$env:Programfiles\Eclipse Adoptium\ /quiet"`
+** Note: You must use INSTALLDIR with FeatureMain. INSTALLDIR Default is `$env:Programfiles\Eclipse Adoptium` **
 
 This will install both the 32 bit and 64 bit versions of the desired package by using the parameter `/both`
 Example: `choco install Temurin11 --params="/both"`
