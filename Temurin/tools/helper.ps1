@@ -14,6 +14,7 @@ function Test-PackageParamaters {
 param(
     [hashtable]$pp
 )
+$disabledMsg = "This switch has been disabled"
 $New_pp = @{}; 
 $toolsDir = @{$true="${env:ProgramFiles}\Temurin";$false="${env:programfiles(x86)}\Temurin"}[ ((Get-OSArchitectureWidth 64) -or ($env:chocolateyForceX86 -eq $true)) ]
     if (![string]::IsNullOrEmpty($pp.transforms)) {
@@ -45,10 +46,12 @@ $toolsDir = @{$true="${env:ProgramFiles}\Temurin";$false="${env:programfiles(x86
             $pp_addlocal_array += -join ("FeatureJavaHome", ",")
           }
           "FeatureIcedTeaWeb" {
-            $pp_addlocal_array += -join ("FeatureIcedTeaWeb", ",")
+            $DisabledMsg | Write-Warning
+#            $pp_addlocal_array += -join ("FeatureIcedTeaWeb", ",")
           }
           "FeatureJNLPFileRunWith" {
-            $pp_addlocal_array += -join ("FeatureJNLPFileRunWith", ",")
+            $DisabledMsg | Write-Warning
+#            $pp_addlocal_array += -join ("FeatureJNLPFileRunWith", ",")
           }
           "FeatureOracleJavaSoft" {
             $pp_addlocal_array += -join ("FeatureOracleJavaSoft", ",")
