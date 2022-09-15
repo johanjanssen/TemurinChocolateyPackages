@@ -145,7 +145,8 @@ if ($fixedVersion) {
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11", "17","18"); $types = @("jdk","jre")
+$numbers = @("11", "18"); $types = @("jdk")
+#$numbers = @("8", "11", "17","18"); $types = @("jdk","jre")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot"); $builds = @("ga"); $os = "windows"
 
@@ -181,4 +182,4 @@ foreach ( $number in $numbers ) {
 return @{ Streams = $streams } 
 }
 # Optionally add '-NoCheckChocoVersion' below to create packages for versions that already exist on the Chocolatey server.
-update -ChecksumFor none -NoCheckUrl
+update -ChecksumFor none -NoCheckUrl -NoCheckChocoVersion
