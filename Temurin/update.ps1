@@ -128,8 +128,9 @@ if ($fixedVersion) {
 }
 
 # Starting with Java 16, the u after the version was removed update 26-10-2021 with Adoptium the 'u' seems to be added again
-#$versionPostFix = ""
-#if ([int]"${number}" -lt 16) { $versionPostFix = "u" }
+# From Adoptium 19, the 'u' seems to have been removed again. Only 8 and 11 seem to include the 'u'
+$versionPostFix = ""
+if ([int]"${number}" -lt 12) { $versionPostFix = "u" }
 
 	@{
         Title           = "Temurin ${type}${number} ${jvm} ${version}"
@@ -137,7 +138,7 @@ if ($fixedVersion) {
         URL32           = $url32
         URL64           = $url64
         Version         = $packageVersion
-        LicenseUrl      = "https://github.com/adoptium/jdk${number}u/blob/master/LICENSE"
+        LicenseUrl      = "https://github.com/adoptium/jdk${number}$versionPostFix/blob/master/LICENSE"
         SemVer          = $vest
         fileType        = $fileType
 	}
