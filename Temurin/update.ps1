@@ -59,7 +59,7 @@ function Get-OpenSourceJDK {
 [CmdletBinding()]
 param(
 [parameter(Mandatory=$true)]
-[ValidateSet("8","11","17","18")]
+[ValidateSet("8","11","17","18","19")]
 [string]$number = "8",
 [parameter(Mandatory=$true)]
 [ValidateSet("ea", "ga")]
