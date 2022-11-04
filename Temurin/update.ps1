@@ -146,8 +146,7 @@ if ([int]"${number}" -lt 12) { $versionPostFix = "u" }
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-#$numbers = @("8", "11", "17","18","19"); $types = @("jdk","jre")
-$numbers = @("11", "17", "19"); $types = @("jdk","jre")
+$numbers = @("8", "11", "17","18","19"); $types = @("jdk","jre")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot"); $builds = @("ga"); $os = "windows"
 
