@@ -59,7 +59,7 @@ function Get-OpenSourceJDK {
 [CmdletBinding()]
 param(
 [parameter(Mandatory=$true)]
-[ValidateSet("8","11","17","18","19","20","21")]
+[ValidateSet("8","11","17","21")]
 [string]$number = "8",
 [parameter(Mandatory=$true)]
 [ValidateSet("ea", "ga")]
@@ -146,7 +146,7 @@ if ([int]"${number}" -lt 12) { $versionPostFix = "u" }
 
 function global:au_GetLatest {
 # Skip 9 and 10 as they don't have MSI's
-$numbers = @("8", "11", "17","18","19","20","21"); $types = @("jdk","jre")
+$numbers = @("8", "11", "17","21"); $types = @("jdk","jre")
 # Optionally add "nightly" to $builds
 $jvms = @("hotspot"); $builds = @("ga"); $os = "windows"
 
